@@ -1,9 +1,9 @@
 import React from "react";
-import Hero from "../components/Hero/Hero";
-import Card from "../components/Card/Card";
+import Hero from "../../components/Hero/Hero";
+import Card from "../../components/Card/Card";
 import { Link } from "react-router-dom";
 import "./LandingPage.css";
-import ReviewAndFAQ from "../components/ReviewandFAQ/ReviewandFAQ";
+import ReviewAndFAQ from "../../components/ReviewandFAQ/ReviewandFAQ";
 
 const LandingPage = ({ pets }) => {
   const featuredPets = pets.slice(0, 4); // Display the first 4 pets on the landing page
