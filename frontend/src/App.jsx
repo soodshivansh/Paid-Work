@@ -5,6 +5,8 @@ import LandingPage from "./pages/LandingPage";
 import AdoptPage from "./pages/AdoptPage";
 import { pets } from "./data/pets";
 import Footer from "./components/Footer/Footer";
+import PetDescription from '../src/pages/PetDescription/petDescription';
+
 
 const App = () => {
   return (
@@ -14,6 +16,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage pets={pets} />} />
         <Route path="/adopt" element={<AdoptPage pets={pets} />} />
+        <Route path="/petDescription" element={<PetDescription/>} />
+
+
       </Routes>
       </main>
       <Footer/>

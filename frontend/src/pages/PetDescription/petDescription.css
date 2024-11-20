@@ -1,0 +1,223 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  line-height: 1.5;
+  padding-top: 100px;
+  color: #333;
+}
+
+/* Page Container */
+.pet-description {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  color: #333;
+}
+
+.petDetails{
+  display: flex;
+  gap: 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* Image Section */
+.image-section {
+  text-align: center;
+  width: 70%  ;
+  margin-bottom: 0px;
+}
+.main-section{
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.image-section .main-image {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.thumbnail-section {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+/* Story Section */
+.story {
+  margin: 0;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 30%;
+}
+
+.story h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.story p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.story ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.story ul li {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.story ul li::before {
+  content: '✔';
+  margin-right: 10px;
+  color: green;
+}
+
+/* Similar Pets Section */
+.similar-pets {
+  margin: 30px 0;
+}
+
+.similar-pets h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+text-align: center;  color: #333;
+}
+
+.pet-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #6200ea;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.moreInfoButton {
+  color: #333;
+  padding: 10px 15px;
+  border-width: 1PX;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-color: #6200ea;
+  width: 100%;
+}
+
+.card-button:hover {
+  background-color: #3700b3;
+}
+
+
+.adopt-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  max-width: 1200px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fff;
+  margin: 30px auto ;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.adopt-prompt p {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.get-started-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #6200ea;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.get-started-button:hover {
+  background-color: #3700b3;
+}

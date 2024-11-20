@@ -1,5 +1,7 @@
 import React from 'react';
 import './Card.css';
+import { Link } from "react-router-dom";
+
 
 const Card = ({ pet }) => {
   return (
@@ -10,7 +12,7 @@ const Card = ({ pet }) => {
         <p>{pet.location}</p>
         <p>Gender: {pet.gender}</p>
         <p>Age: {pet.age}</p>
-        <button className="card-button">More Info</button>
+        <Link to="/petDescription"><button className="card-button">More Info</button></Link>
       </div>
     </div>
   );
