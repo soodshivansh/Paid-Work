@@ -1,0 +1,64 @@
+/* Footer.css */
+.footer {
+    background-color: #f4f4f4; /* Light grey background */
+    padding: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    color: #27496d;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: center; /* Center the sections horizontally */
+    align-items: flex-start; /* Align sections at the top */
+    gap: 4rem; /* Equal spacing between the two sections */
+  }
+  
+  .footer-section {
+    flex: 1; /* Ensures both sections get equal space */
+    max-width: 400px; /* Limits the width of each section */
+    text-align: left; /* Aligns text inside the sections */
+  }
+  
+  .footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer-section ul li a {
+    color: #27496d;
+    text-decoration: none;
+  }
+  
+  .footer-section ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  .contact-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-info i {
+    color: #6c63ff; /* Icon color */
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    color: #6c63ff;
+    font-size: 0.9rem;
+  }
+  
