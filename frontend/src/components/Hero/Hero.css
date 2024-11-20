@@ -1,0 +1,106 @@
+/* Hero Section */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+.hero {
+    margin-top: 110px;
+    background-color: #ffffff;
+    padding: 100px 20px;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  /* Navbar Placeholder */
+  .navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    z-index: 100;
+  }
+  
+  /* Hero Container */
+  .hero-container {
+    display: flex;
+    align-items: center; /* Aligns items vertically */
+    justify-content: space-between; /* Ensures equal spacing between content and image */
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 40px; /* Adds space between the text and the image */
+  }
+  
+  
+  /* Hero Content */
+  .hero-content {
+    flex: 1;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #27496d;
+    line-height: 1.2;
+  }
+  
+  .hero-content .highlight {
+    color: #7442ff;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+    color: #555;
+    margin: 20px 0;
+    line-height: 1.6;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .btn-primary {
+    background-color: #7442ff;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #562ec7;
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    color: #7442ff;
+    padding: 12px 24px;
+    border: 2px solid #7442ff;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #7442ff;
+    color: white;
+  }
+  
+/* Hero Image */
+.hero-image {
+  flex: 1; /* Ensures the image container shares space with the content */
+  display: flex;
+  align-items: center; /* Vertically centers the image */
+  justify-content: flex-end; /* Pushes the image to the right */
+}
+
+.hero-image .image {
+  width: 100%; /* Makes it responsive */
+  max-width: 500px; /* Limits the image size */
+  border-radius: 12px; /* Optional: Adds rounded corners */
+  /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); Optional: Adds a slight shadow */
+}
