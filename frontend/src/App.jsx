@@ -17,8 +17,6 @@ const App = () => {
         <Route path="/" element={<LandingPage pets={pets} />} />
         <Route path="/adopt" element={<AdoptPage pets={pets} />} />
         <Route path="/petDescription" element={<PetDescription/>} />
-
-
       </Routes>
       </main>
       <Footer/>
