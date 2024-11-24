@@ -1,12 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./petDescription.css";
-import PetInfo from '../../components/PetInfo/petInfo';
-import petDetails from '../../data/petInfo';
+import PetInfo from "../../components/PetInfo/petInfo";
+import petDetails from "../../data/petInfo";
 
 const PetDescription = () => {
+    const navigate = useNavigate(); // Initialize useNavigate
+
     const handleClick = () => {
-        alert("Redirecting to adoption process!");
-      };
+        navigate("/choose-to-adopt"); // Redirect to ChooseToAdopt page
+    };
+
     return (
         <div className="pet-description">
             <div className="header">
@@ -16,7 +20,8 @@ const PetDescription = () => {
                         <img
                             src="https://via.placeholder.com/50x50"
                             alt="Maggie"
-                            className="main-image" />
+                            className="main-image"
+                        />
                     </div>
                     <div>
                         <h2>Maggie</h2>
@@ -50,7 +55,11 @@ const PetDescription = () => {
                 <div className="story">
                     <h3>Maggie Story</h3>
                     <p>
-                        We have had Magie since she was able to leave her mum as a puppy so 8 weeks old. Magie currently lives with two children age 7 and 13 and has many visitors to the house which are children she is great with kids.There's lots of cats birds etc around the area and in the garden on most days as she's not fussed by these.
+                        We have had Magie since she was able to leave her mum as a puppy so 8
+                        weeks old. Magie currently lives with two children age 7 and 13 and has
+                        many visitors to the house which are children she is great with kids.
+                        There's lots of cats birds etc around the area and in the garden on most
+                        days as she's not fussed by these.
                     </p>
                     <ul>
                         <li>Vaccinated</li>

@@ -56,21 +56,33 @@ const LandingPage = ({ pets }) => {
       <i className="fa fa-user icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
 
         <span className="step-number">1</span>
-        <p>Set up your profile (including photos) in minutes</p>
+        <p style={{
+                fontSize: "1.1 rem",
+                fontWeight: "500",
+                fontFamily: "'Montserrat', sans-serif",
+            }}>Set up your profile in minutes</p>
       </div>
     </div>
     <div className="step">
       <div className="step-box">
       <i className="fa fa-home icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
         <span className="step-number">2</span>
-        <p>Describe your home and routine so rehomer can see if it's the right fit</p>
+        <p style={{
+                fontSize: "1.1 rem",
+                fontWeight: "500",
+                fontFamily: "'Montserrat', sans-serif",
+            }}>Describe your home and routine so rehomer can see if it's the right fit</p>
       </div>
     </div>
     <div className="step">
       <div className="step-box">
       <i className="fa fa-search icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
         <span className="step-number">3</span>
-        <p>Start your search!</p>
+        <p style={{
+                fontSize: "1.1 rem",
+                fontWeight: "500",
+                fontFamily: "'Montserrat', sans-serif",
+            }}>Start your search!</p>
       </div>
     </div>
   </div>

@@ -1,11 +1,11 @@
 /* Hero Section */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 .hero {
-    margin-top: 30px;
+    margin-top: 10px;
     background-color: #ffffff;
     padding: 100px 20px;
     position: relative;
-    font-family: 'Montserrat', sans-serif;
+     font-family: 'Montserrat', sans-serif;
   }
   
   /* Navbar Placeholder */

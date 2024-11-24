@@ -172,7 +172,8 @@ text-align: center;  color: #333;
 }
 
 .moreInfoButton {
-  color: #333;
+  background-color:#6200ea ;
+  color: #ffffff;
   padding: 10px 15px;
   border-width: 1PX;
   border-radius: 3px;

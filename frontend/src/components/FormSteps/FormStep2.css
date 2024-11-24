@@ -1,0 +1,62 @@
+.form-step-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Full width */
+  min-height: 70vh; /* Expand vertically */
+  margin: 0 auto;
+  padding: 0;
+}
+
+.form-note {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  gap: 24px;
+  width: 90%; /* Expanded width */
+}
+
+.address-grid input {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.telephone-section {
+  margin-top: 24px;
+  width: 90%; /* Expanded width */
+}
+
+.mobile-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.mobile-section input {
+  flex-grow: 1;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+}
+
+.mobile-section button {
+  background-color: #6c63ff;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
