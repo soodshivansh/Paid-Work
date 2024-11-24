@@ -1,8 +1,9 @@
 import React from "react";
-import "./Navbar.css";
 import { Link } from "react-router-dom";
+import "./Navbar.css";
+import UserMenu from "./UserMenu";
 
-const Navbar = () => {
+const Navbar = ({ handleLoginPopup, user, setUser }) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -12,6 +13,7 @@ const Navbar = () => {
             <img src="./assets/paws4home_logo.png" alt="Logo" className="logo-image" />
             <span>Paws4Home</span>
           </div>
+
         </Link>
 
         {/* Navigation Links */}
@@ -25,9 +27,18 @@ const Navbar = () => {
         {/* Right Section */}
         <div className="nav-right">
           <button className="notification-btn">
-            <i className="bell-icon"></i> {/* Placeholder for a bell icon */}
+            <i className="bell-icon"></i>
           </button>
-          <Link to="/login" className="login-link">Login | Register</Link>
+          {user ? (
+            <UserMenu user={user} setUser={setUser} />
+          ) : (
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              onClick={handleLoginPopup}
+            >
+              Login
+            </button>
+          )}
         </div>
       </div>
     </nav>

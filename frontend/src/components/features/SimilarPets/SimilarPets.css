@@ -1,0 +1,29 @@
+.similar-pets-section {
+  padding: 2rem 0;
+  background-color: #f9fafb;
+  margin-top: 2rem;
+}
+
+.similar-pets-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.pet-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.pet-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-size: 1.125rem;
+}

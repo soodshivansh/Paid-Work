@@ -1,103 +1,103 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./petDescription.css";
-import PetInfo from "../../components/PetInfo/petInfo";
-import petDetails from "../../data/petInfo";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import './petDescription.css';
+import PetInfo from '../../components/PetInfo/petInfo';
+import { mapPetToDetails } from '../../utils/petUtils';
+import SimilarPets from '../../components/features/SimilarPets/SimilarPets';
 
 const PetDescription = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
+  const [pet, setPet] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const { id } = useParams();
 
-    const handleClick = () => {
-        navigate("/choose-to-adopt"); // Redirect to ChooseToAdopt page
+  useEffect(() => {
+    const fetchPet = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/pets/${id}`);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setPet(data);
+      } catch (err) {
+        console.error("Error fetching pet data:", err);
+        setError(err.message); // Capture error
+      } finally {
+        setLoading(false); // Stop loading regardless of success or error
+      }
     };
 
-    return (
-        <div className="pet-description">
-            <div className="header">
-                <h1>Hi Human!</h1>
-                <div className="petDetails">
-                    <div>
-                        <img
-                            src="https://via.placeholder.com/50x50"
-                            alt="Maggie"
-                            className="main-image"
-                        />
-                    </div>
-                    <div>
-                        <h2>Maggie</h2>
-                        <p>Pet ID: 93638310</p>
-                    </div>
-                </div>
-                <div className="location">
-                    <p>United States of America</p>
-                    <p>📍 California (32 km away)</p>
-                </div>
-            </div>
-            <div className="main-section">
-                <div className="image-section">
-                    <img
-                        src="https://via.placeholder.com/600x300"
-                        alt="Maggie"
-                        className="main-image"
-                    />
-                    <div className="thumbnail-section">
-                        {[...Array(5)].map((_, i) => (
-                            <img
-                                key={i}
-                                src="https://via.placeholder.com/100x100"
-                                alt={`Thumbnail ${i}`}
-                                className="thumbnail"
-                            />
-                        ))}
-                    </div>
-                </div>
+    fetchPet();
+  }, [id]);
 
-                <div className="story">
-                    <h3>Maggie Story</h3>
-                    <p>
-                        We have had Magie since she was able to leave her mum as a puppy so 8
-                        weeks old. Magie currently lives with two children age 7 and 13 and has
-                        many visitors to the house which are children she is great with kids.
-                        There's lots of cats birds etc around the area and in the garden on most
-                        days as she's not fussed by these.
-                    </p>
-                    <ul>
-                        <li>Vaccinated</li>
-                        <li>House-trained</li>
-                        <li>Neutered</li>
-                        <li>Shots up-to-date</li>
-                        <li>Microchipped</li>
-                    </ul>
-                </div>
-            </div>
-            <PetInfo petDetails={petDetails} />
+  if (loading) {
+    return <p>Loading...</p>; // Show loading while fetching data
+  }
 
-            <div className="adopt-prompt">
-                <p>If you are interested to adopt</p>
-                <button className="get-started-button" onClick={handleClick}>
-                    Get started
-                </button>
-            </div>
+  if (error) {
+    return <p>Error: {error}</p>; // Display error message if API fails
+  }
 
-            <div className="similar-pets">
-                <h1>Similar Pets</h1>
-                <div className="pet-cards">
-                    {[...Array(4)].map((_, i) => (
-                        <div key={i} className="card">
-                            <img
-                                src="https://via.placeholder.com/150"
-                                alt={`Pet ${i}`}
-                                className="card-image"
-                            />
-                            <h4>Pet Name</h4>
-                            <p>Pet Breed</p>
-                            <button className="moreInfoButton">More Info</button>
-                        </div>
-                    ))}
-                </div>
-            </div>
+  if (!pet) {
+    return <p>No pet details available</p>; // Handle case where pet is not found
+  }
+
+  return (
+    <div className="pet-description">
+      <div className="header">
+        <h1>Hi Human!</h1>
+        <div className="petDetails">
+          <div>
+            <img src={pet.photos[0]} alt={pet.name} className="main-image" />
+          </div>
+          <div>
+            <h2>{pet.name}</h2>
+            <p>Pet ID: {pet._id}</p>
+          </div>
         </div>
-    );
+        <div className="location">
+          <p>{pet.location.country}</p>
+          <p>📍 {`${pet.location.city}, ${pet.location.state}`}</p>
+        </div>
+      </div>
+      <div className="main-section">
+        <div className="image-section">
+          <img src={pet.photos[0]} alt={pet.name} className="main-image" />
+          <div className="thumbnail-section">
+            {pet.photos.map((photo, i) => (
+              <img key={i} src={photo} alt={`Thumbnail ${i}`} className="thumbnail" />
+            ))}
+          </div>
+        </div>
+
+        <div className="story">
+          <h3>{pet.name}'s Story</h3>
+          <p>{pet.story}</p>
+          <ul>
+            {pet.vaccinated && <li>Vaccinated</li>}
+            {pet.houseTrained && <li>House-trained</li>}
+            {pet.neutered && <li>Neutered</li>}
+            {pet.microchipped && <li>Microchipped</li>}
+          </ul>
+        </div>
+      </div>
+      <PetInfo petDetails={mapPetToDetails(pet)} />
+
+      <div className="adopt-prompt">
+        <p>If you are interested to adopt</p>
+        <button className="get-started-button" onClick={() => alert("Redirecting to adoption process!")}>
+          Get started
+        </button>
+      </div>
+
+      {/* Similar Pets Section */}
+      <SimilarPets currentPet={pet} maxPets={3} />
+    </div>
+  );
 };
 
 export default PetDescription;
