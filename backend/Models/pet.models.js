@@ -1,111 +1,73 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const petSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Pet's name is required"],
-      trim: true,
+const petSchema = new Schema({
+  name: { 
+    type: String, 
+    required: true 
+  },
+  breed: { 
+    type: String, 
+    required: true 
+  },
+  gender: { 
+    type: String, 
+    enum: ["Male", "Female"], 
+    required: true 
+  },
+  age: { 
+    type: String, 
+    required: true 
+  },
+  color: { 
+    type: String, 
+    required: true 
+  },
+  weight: { 
+    type: String, 
+    required: true 
+  },
+  height: { type: String, required: true },
+  location: {
+    city: { 
+      type: String, 
+      required: true 
     },
-    species: {
-      type: String,
-      enum: ['Dog', 'Cat', 'Bird', 'Rabbit', 'Other'],
-      required: [true, 'Species is required'],
+    state: { 
+      type: String, 
+      required: true 
     },
-    breed: {
-      type: String,
-      trim: true,
-    },
-    age: {
-      value: {
-        type: Number,
-        required: [true, 'Age is required'],
-        min: 0,
-      },
-      unit: {
-        type: String,
-        enum: ['Years', 'Months'],
-        default: 'Years',
-      },
-    },
-    gender: {
-      type: String,
-      enum: ['Male', 'Female'],
-      required: [true, 'Gender is required'],
-    },
-    size: {
-      type: String,
-      enum: ['Small', 'Medium', 'Large'],
-    },
-    vaccinated: {
-      type: Boolean,
-      default: false,
-    },
-    neutered: {
-      type: Boolean,
-      default: false,
-    },
-    medicalHistory: {
-      type: String,
-      default: 'No known medical conditions',
-    },
-    status: {
-      type: String,
-      enum: ['Available', 'Adopted', 'Pending'],
-      default: 'Available',
-    },
-    adoptionFee: {
-      type: Number,
-      min: 0,
-    },
-    adoptionRequirements: {
-      type: String,
-    },
-    currentLocation: {
-      type: {
-        city: { type: String, required: true },
-        state: { type: String, required: true },
-        country: { type: String, required: true },
-      },
-      required: true,
-    },
-    ownerId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    color: {
-      type: [String], 
-    },
-    temperament: {
-      type: [String], 
-      enum: ['Friendly', 'Shy', 'Playful', 'Aggressive', 'Calm', 'Energetic'],
-    },
-    photos: {
-      type: [String], 
-      validate: {
-        validator: function (v) {
-          return v.length > 0;
-        },
-        message: 'At least one photo is required',
-      },
-    },  
-    tags: {
-      type: [String],
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
+    country: { 
+      type: String, 
+      required: true 
     },
   },
-  {
-    timestamps: true, 
-  }
-);
-
-const Pet = model('Pet', petSchema);
+  vaccinated: { 
+    type: Boolean, 
+    default: false 
+  },
+  neutered: { 
+    type: Boolean, 
+    default: false 
+  },
+  microchipped: { 
+    type: Boolean, 
+    default: false 
+  },
+  houseTrained: { 
+    type: Boolean, 
+    default: false 
+  },
+  story: { 
+    type: String, 
+    required: true 
+  },
+  photos: [String],
+  status: { 
+    type: String, 
+    enum: ["Available", "Adopted", "Pending"], 
+    default: "Available" 
+  },
+}, { timestamps: true });
+``
+const Pet = model("Pet", petSchema);
 export default Pet;
