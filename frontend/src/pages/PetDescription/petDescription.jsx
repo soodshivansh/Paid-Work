@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './petDescription.css';
 import PetInfo from '../../components/PetInfo/petInfo';
@@ -11,6 +11,7 @@ const PetDescription = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -89,7 +90,10 @@ const PetDescription = () => {
 
       <div className="adopt-prompt">
         <p>If you are interested to adopt</p>
-        <button className="get-started-button" onClick={() => alert("Redirecting to adoption process!")}>
+        <button 
+          className="get-started-button" 
+          onClick={() => navigate('/choose-to-adopt', { state: { petId: id } })}
+        >
           Get started
         </button>
       </div>

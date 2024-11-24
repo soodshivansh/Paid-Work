@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Signin from "./signup";
 import Login from "./login";
 import { motion, AnimatePresence } from "framer-motion";
+import Lottie from "lottie-react";
 
 const LoginPopUp = ({ loginPopup, handleLoginPopup, onLoginSuccess }) => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [animationData, setAnimationData] = useState(null);
 
   const handleSignIn = () => {
     setShowSignIn(!showSignIn);
@@ -25,20 +27,17 @@ const LoginPopUp = ({ loginPopup, handleLoginPopup, onLoginSuccess }) => {
     };
   }, [loginPopup]);
 
+  useEffect(() => {
+    fetch('/assets/signUpAnimation.json')
+      .then(response => response.json())
+      .then(data => setAnimationData(data))
+      .catch(error => console.error('Error loading animation:', error));
+  }, []);
+
   const handleBackdropClick = (e) => {
     if (e.target === loginPopupRef.current) {
       handleLoginPopup(false);
     }
-  };
-
-  const bgImage = {
-    width: "100%",
-    height: "100%",
-    backgroundImage: "url(https://picsum.photos/800/800)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    borderRadius: "0 1rem 1rem 0",
   };
 
   return (
@@ -54,14 +53,13 @@ const LoginPopUp = ({ loginPopup, handleLoginPopup, onLoginSuccess }) => {
           onClick={handleBackdropClick}
         >
           <motion.div
-            className="relative bg-white rounded-2xl shadow-2xl overflow-hidden w-full"
-            style={{ maxWidth: "1000px" }}
+            className="relative bg-white rounded-2xl shadow-2xl overflow-hidden w-full max-w-4xl mx-auto"
             initial={{ scale: 0.9, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-8 relative">
                 <button
                   onClick={() => handleLoginPopup(false)}
@@ -87,15 +85,20 @@ const LoginPopUp = ({ loginPopup, handleLoginPopup, onLoginSuccess }) => {
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <div className="hidden sm:block relative h-full">
+              <div className="hidden md:flex items-center justify-center p-8 bg-gray-50">
                 <motion.div
-                  className="absolute inset-0"
-                  style={bgImage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
+                  className="w-full max-w-md"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-purple-500/30 mix-blend-overlay" />
+                  {animationData && (
+                    <Lottie
+                      animationData={animationData}
+                      loop={true}
+                      className="w-full h-auto"
+                    />
+                  )}
                 </motion.div>
               </div>
             </div>
