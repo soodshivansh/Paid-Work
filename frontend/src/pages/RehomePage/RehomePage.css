@@ -1,0 +1,230 @@
+.rehome-page {
+    font-family: "Arial", sans-serif;
+    color: #333;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+.hero-text {
+    max-width: 50%;
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;
+    color: #6c63ff;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* How It Works Section */
+.how-it-works {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #fff;
+}
+
+.how-it-works h2 {
+    font-size: 2rem;
+    color: #6c63ff;
+    margin-bottom: 20px;
+    animation: slideIn 1s ease-in-out;
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.step {
+    max-width: 200px;
+    text-align: center;
+}
+
+.step-box {
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.icon {
+    margin-bottom: 10px;
+    /* animation: bounce 2s infinite; */
+}
+
+.step-number {
+    font-size: 2rem;
+    color: #6c63ff;
+    margin-bottom: 10px;
+    display: block;
+    /* animation: rotateIn 1.5s ease-in-out; */
+}
+
+.step p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Safety Section */
+.safety-section {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.safety-section h2 {
+    font-size: 2rem;
+    color: #6c63ff;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.safety-section p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.cta-section h2 {
+    font-size: 2rem;
+    color: #6c63ff;
+    margin-bottom: 20px;
+    animation: pulse 1.5s infinite;
+}
+
+.cta-section p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    font-size: 1rem;
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    animation: zoomIn 1s ease-in-out;
+}
+
+.cta-button:hover {
+    background-color: #4b46c4;
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateIn {
+    from {
+        transform: rotate(-360deg);
+    }
+    to {
+        transform: rotate(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}

@@ -1,44 +1,252 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { FaMapMarkerAlt, FaVenusMars, FaPaw, FaPalette, FaRuler, FaCat, FaDog } from 'react-icons/fa';
 import Card from "../../components/Card/Card";
 import "./AdoptPage.css";
 
-const AdoptPage = ({ pets }) => {
-  const [filters, setFilters] = useState({ gender: "", size: "" });
+const AdoptPage = () => {
+  const [pets, setPets] = useState([]);
+  const [filters, setFilters] = useState({
+    location: "",
+    type: "",
+    gender: "",
+    breed: "",
+    color: "",
+    size: "",
+  });
+  const [loading, setLoading] = useState(true);
+
+  const dogBreeds = [
+    "Labrador Retriever",
+    "German Shepherd",
+    "Golden Retriever",
+    "Bulldog",
+    "Beagle",
+    "Poodle",
+    "Rottweiler",
+    "Yorkshire Terrier",
+    "Boxer",
+    "Dachshund"
+  ];
+
+  const catBreeds = [
+    "Persian",
+    "Maine Coon",
+    "Siamese",
+    "British Shorthair",
+    "Ragdoll",
+    "Bengal",
+    "American Shorthair",
+    "Sphynx",
+    "Scottish Fold",
+    "Russian Blue"
+  ];
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/pets");
+        setPets(response.data);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
+    setFilters(prev => {
+      // If changing pet type, reset breed
+      if (name === 'type') {
+        return {
+          ...prev,
+          [name]: value,
+          breed: ''
+        };
+      }
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  const getBreedOptions = () => {
+    if (filters.type === 'dog') {
+      return dogBreeds;
+    } else if (filters.type === 'cat') {
+      return catBreeds;
+    }
+    return [];
   };
 
   const filteredPets = pets.filter((pet) => {
     return (
+      (!filters.location || pet.location?.city?.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (!filters.type || pet.type === filters.type) &&
       (!filters.gender || pet.gender === filters.gender) &&
+      (!filters.breed || pet.breed === filters.breed) &&
+      (!filters.color || pet.color === filters.color) &&
       (!filters.size || pet.size === filters.size)
     );
   });
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
   return (
     <div className="adopt-page">
-      <h1>Find Your Perfect <span className="highlight">Pet</span></h1>
-
-      <div className="filters">
-        <select name="gender" onChange={handleFilterChange}>
-          <option value="">All Genders</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        <select name="size" onChange={handleFilterChange}>
-          <option value="">All Sizes</option>
-          <option value="Small">Small</option>
-          <option value="Medium">Medium</option>
-          <option value="Large">Large</option>
-        </select>
+      {/* Header Section */}
+      <div className="page-header">
+        <h1>Find Your Perfect Companion</h1>
+        <p>Browse through our available pets and find your new family member</p>
       </div>
 
-      <div className="pets-grid">
-        {filteredPets.map((pet) => (
-          <Card key={pet.id} pet={pet} />
-        ))}
+      <div className="content-container">
+        {/* Filters Section */}
+        <div className="filters-section">
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaMapMarkerAlt />
+              <span>Location</span>
+            </div>
+            <input
+              type="text"
+              name="location"
+              placeholder="Search by location"
+              value={filters.location}
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPaw />
+              <span>Pet Type</span>
+            </div>
+            <select 
+              name="type" 
+              value={filters.type}
+              onChange={handleFilterChange} 
+              className="filter-input"
+            >
+              <option value="">All Types</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPaw />
+              <span>Breed</span>
+            </div>
+            <select 
+              name="breed" 
+              value={filters.breed}
+              onChange={handleFilterChange} 
+              className="filter-input"
+              disabled={!filters.type}
+            >
+              <option value="">All Breeds</option>
+              {getBreedOptions().map((breed) => (
+                <option key={breed} value={breed.toLowerCase()}>
+                  {breed}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaVenusMars />
+              <span>Gender</span>
+            </div>
+            <select 
+              name="gender" 
+              value={filters.gender}
+              onChange={handleFilterChange} 
+              className="filter-input"
+            >
+              <option value="">All Genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPalette />
+              <span>Color</span>
+            </div>
+            <select 
+              name="color" 
+              value={filters.color}
+              onChange={handleFilterChange} 
+              className="filter-input"
+            >
+              <option value="">All Colors</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Brown">Brown</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaRuler />
+              <span>Size</span>
+            </div>
+            <select 
+              name="size" 
+              value={filters.size}
+              onChange={handleFilterChange} 
+              className="filter-input"
+            >
+              <option value="">All Sizes</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Pets Grid Section */}
+        <motion.div 
+          className="pets-section"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {loading ? (
+            <div className="loading-state">
+              <div className="loader"></div>
+            </div>
+          ) : filteredPets.length > 0 ? (
+            <div className="pets-grid">
+              {filteredPets.map((pet) => (
+                <Card key={pet._id} pet={pet} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <h3>No pets found</h3>
+              <p>Try adjusting your filters to find more pets</p>
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   );

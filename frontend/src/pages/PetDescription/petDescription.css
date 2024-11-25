@@ -172,7 +172,8 @@ text-align: center;  color: #333;
 }
 
 .moreInfoButton {
-  color: #333;
+  background-color:#6200ea ;
+  color: #ffffff;
   padding: 10px 15px;
   border-width: 1PX;
   border-radius: 3px;
@@ -220,4 +221,22 @@ text-align: center;  color: #333;
 
 .get-started-button:hover {
   background-color: #3700b3;
+}
+
+.location {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.location p {
+  font-size: 1rem;
+  color: #495057;
+  margin: 5px 0;
+}
+
+.location p:last-child {
+  font-weight: 500;
+  color: #212529;
 }

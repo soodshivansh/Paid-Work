@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from '../pages/LandingPage';
 import AdoptPage from '../pages/AdoptPage';
-import PetDescription from '../pages/PetDescription/petDescription';
+import PetDescription from '../pages/PetDescription/PetDescription';
 
 const AppRoutes = ({ pets }) => {
   return (

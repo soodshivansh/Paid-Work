@@ -1,0 +1,58 @@
+.form-step-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Expand to full width */
+  min-height: 70vh; /* Cover a significant vertical area */
+  margin: 0 auto;
+  padding: 0;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #6c63ff;
+}
+
+.profile-username {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.profile-email {
+  font-size: 18px;
+  color: #555;
+}
+
+.form-info {
+  margin-top: 24px;
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+}
+
+.terms-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.terms-text a {
+  color: #6c63ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.terms-text a:hover {
+  text-decoration: underline;
+}

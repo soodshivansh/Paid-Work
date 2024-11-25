@@ -45,7 +45,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 300px; /* Increased width for larger boxes */
+  width: 300px; /* Fixed width instead of max-width */
 }
 
 .step-box {
@@ -57,6 +57,9 @@
   flex-direction: column;
   align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  height: 250px; /* Fixed height for all boxes */
+  justify-content: center; /* Center content vertically */
 }
 
 .step-box:hover {
@@ -81,4 +84,16 @@
   font-size: 1.2rem; /* Larger font size for text */
   color: #333;
   line-height: 1.8; /* Improved readability */
+}
+
+.loading, .error {
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.error {
+  color: #dc3545;
 }

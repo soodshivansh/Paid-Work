@@ -1,0 +1,45 @@
+.form-step-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .roommate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .roommate-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .roommate-item input,
+  .roommate-item select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .extra-info {
+    margin-top: 20px;
+  }
+  
+  .radio-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .radio-group input {
+    margin-right: 5px;
+  }
+  
