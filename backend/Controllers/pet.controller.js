@@ -1,4 +1,5 @@
 import Pet from '../Models/pet.models.js';
+import { upload } from '../config/cloudinary.js';
 
 export const getPets = async (req, res) => {
   try {
@@ -44,24 +45,45 @@ export const getPetById = async (req, res) => {
 };
 
 export const createPet = async (req, res) => {
-  const petData = req.body;
-  const newPet = new Pet(petData);
   try {
-    await newPet.save();
-    res.status(201).json(newPet);
+    const petData = req.body;
+    
+    // Handle image uploads
+    if (req.files && req.files.length > 0) {
+      petData.images = req.files.map(file => file.path);
+    }
+
+    const pet = new Pet(petData);
+    const savedPet = await pet.save();
+    res.status(201).json(savedPet);
   } catch (error) {
+    console.error('Error in createPet:', error);
     res.status(500).json({ message: error.message });
   }
 };
 
 export const updatePet = async (req, res) => {
-  const { id } = req.params;
-  const petData = req.body;
   try {
-    const updatedPet = await Pet.findByIdAndUpdate(id, petData, { new: true });
-    if (!updatedPet) return res.status(404).json({ message: "Pet not found" });
+    const petData = req.body;
+    
+    // Handle image uploads for updates
+    if (req.files && req.files.length > 0) {
+      petData.images = req.files.map(file => file.path);
+    }
+
+    const updatedPet = await Pet.findByIdAndUpdate(
+      req.params.id,
+      petData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedPet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
     res.status(200).json(updatedPet);
   } catch (error) {
+    console.error('Error in updatePet:', error);
     res.status(500).json({ message: error.message });
   }
 };

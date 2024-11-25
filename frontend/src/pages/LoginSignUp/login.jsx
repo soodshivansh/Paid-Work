@@ -9,7 +9,6 @@ import { googleLogin } from "../../services/authService";
 const Login = ({ handleSignIn, onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isAdminLogin, setIsAdminLogin] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -46,19 +45,17 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
       );
     };
 
-    if (!isAdminLogin) {
-      const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.onload = loadGoogleSignIn;
-      document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = loadGoogleSignIn;
+    document.head.appendChild(script);
 
-      return () => {
-        document.head.removeChild(script);
-      };
-    }
-  }, [isAdminLogin]);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,7 +65,7 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const endpoint = isAdminLogin ? '/api/users/admin/login' : '/api/users/login';
+      const endpoint = '/api/users/login';
       const response = await axios.post(
         `http://localhost:8080${endpoint}`,
         formData
@@ -77,23 +74,15 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
       if (response.data) {
         localStorage.setItem("userInfo", JSON.stringify(response.data));
         localStorage.setItem("token", response.data.token);
-        toast.success(`${isAdminLogin ? 'Admin login' : 'Login'} successful!`);
-        if (response.data.isAdmin) {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
+        toast.success("Login successful!");
+        onLoginSuccess();
+        navigate("/");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
-  };
-
-  const toggleLoginMode = () => {
-    setIsAdminLogin(!isAdminLogin);
-    setFormData({ email: "", password: "" });
   };
 
   return (
@@ -104,7 +93,7 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {isAdminLogin ? 'Admin Login' : 'Welcome Back'}
+        Welcome Back
       </motion.h1>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -171,57 +160,45 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {isAdminLogin ? 'Logging in as Admin...' : 'Logging in...'}
+                Logging in...
               </span>
             ) : (
-              isAdminLogin ? 'Login as Admin' : 'Login'
+              'Login'
             )}
           </motion.button>
-
-          <button
-            type="button"
-            onClick={toggleLoginMode}
-            className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {isAdminLogin ? 'Switch to User Login' : 'Switch to Admin Login'}
-          </button>
         </div>
       </form>
       
-      {!isAdminLogin && (
-        <>
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <div id="googleLoginButton" className="flex justify-center"></div>
-            </div>
+      <div className="mt-6">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
           </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+          </div>
+        </div>
 
-          <motion.p
-            className="mt-8 text-center text-sm text-gray-600"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Don't have an account?{" "}
-            <button
-              type="button"
-              className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition-colors"
-              onClick={handleSignIn}
-            >
-              Sign up
-            </button>
-          </motion.p>
-        </>
-      )}
+        <div className="mt-6">
+          <div id="googleLoginButton" className="flex justify-center"></div>
+        </div>
+      </div>
+
+      <motion.p
+        className="mt-8 text-center text-sm text-gray-600"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        Don't have an account?{" "}
+        <button
+          type="button"
+          className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition-colors"
+          onClick={handleSignIn}
+        >
+          Sign up
+        </button>
+      </motion.p>
     </div>
   );
 };

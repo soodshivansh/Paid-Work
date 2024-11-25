@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FaEdit, FaUser, FaEye, FaEyeSlash, FaCamera, FaCheck, FaTimes } from 'react-icons/fa';
-import { getProfile, updateProfile, updatePassword, uploadImage } from '../../services/profileService';
+import { getProfile, updateProfile, updatePassword } from '../../services/profileService';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -174,13 +174,12 @@ const UpdateProfile = () => {
       setImageFile(file);
       try {
         setIsLoading(true);
-        const imageUrl = await uploadImage(file);
-        const response = await updateProfile({ profilePic: imageUrl });
+        const response = await updateProfile({}, file);
         if (response.success) {
-          setProfilePic(imageUrl);
-          toast.success(response.message || 'Profile picture updated successfully');
+          setProfilePic(response.user.profilePicture);
+          toast.success('Profile picture updated successfully');
         } else {
-          toast.error(response.message || 'Failed to update profile picture');
+          toast.error('Failed to update profile picture');
         }
       } catch (error) {
         console.error('Profile picture update error:', error);
@@ -247,6 +246,104 @@ const UpdateProfile = () => {
       </div>
     </div>
   );
+const handleEditStateAndPincode = () => {
+  setEditingField('stateAndPincode');
+  setTempValue({ state: formData.state, pincode: formData.pincode });
+};
+
+const handleSaveStateAndPincode = async () => {
+  const { state, pincode } = tempValue;
+  if (!state.trim() || !pincode.trim()) {
+    toast.error('State and Pincode cannot be empty');
+    return;
+  }
+
+  setIsLoading(true);
+  try {
+    const updateData = { state, zipCode: pincode };
+    const response = await updateProfile(updateData);
+    if (response.success) {
+      setFormData(prev => ({ ...prev, state, pincode }));
+      toast.success('Profile updated successfully');
+      setEditingField(null);
+      setTempValue('');
+    } else {
+      toast.error(response.message || 'Update failed');
+    }
+  } catch (error) {
+    console.error('Update field error:', error);
+    toast.error(error.message || 'Failed to update field');
+    if (error.message.includes('Authentication')) {
+      navigate('/login');
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const renderStateAndPincodeFields = () => (
+  <div className="relative">
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      State and Pincode
+    </label>
+    <div className="flex items-center gap-2">
+      {editingField === 'stateAndPincode' ? (
+        <>
+          <input
+            type="text"
+            value={tempValue.state}
+            onChange={(e) => setTempValue(prev => ({ ...prev, state: e.target.value }))}
+            disabled={isLoading}
+            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <input
+            type="text"
+            value={tempValue.pincode}
+            onChange={(e) => setTempValue(prev => ({ ...prev, pincode: e.target.value }))}
+            disabled={isLoading}
+            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <button
+            onClick={handleSaveStateAndPincode}
+            disabled={isLoading}
+            className="p-2 text-green-600 hover:text-green-700"
+          >
+            <FaCheck />
+          </button>
+          <button
+            onClick={handleCancelEdit}
+            disabled={isLoading}
+            className="p-2 text-red-600 hover:text-red-700"
+          >
+            <FaTimes />
+          </button>
+        </>
+      ) : (
+        <>
+          <input
+            type="text"
+            value={formData.state}
+            disabled
+            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
+          />
+          <input
+            type="text"
+            value={formData.pincode}
+            disabled
+            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
+          />
+          <button
+            onClick={handleEditStateAndPincode}
+            disabled={isLoading}
+            className="p-2 text-blue-600 hover:text-blue-700"
+          >
+            <FaEdit />
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -297,8 +394,7 @@ const UpdateProfile = () => {
             {renderField('name', 'Name')}
             {renderField('email', 'Email', true)}
             {renderField('phone', 'Phone')}
-            {renderField('state', 'State')}
-            {renderField('pincode', 'Pincode')}
+            {renderStateAndPincodeFields()}
             {renderField('country', 'Country', true)}
 
             {/* Password Change Section */}

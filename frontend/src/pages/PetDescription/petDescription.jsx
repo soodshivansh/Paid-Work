@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './petDescription.css';
 import PetInfo from '../../components/PetInfo/petInfo';
 import { mapPetToDetails } from '../../utils/petUtils';
-import SimilarPets from '../../components/features/SimilarPets/SimilarPets';
 
 const PetDescription = () => {
   const [pet, setPet] = useState(null);
@@ -62,7 +60,7 @@ const PetDescription = () => {
         </div>
         <div className="location">
           <p>{pet.location.country}</p>
-          <p>📍 {`${pet.location.city}, ${pet.location.state}`}</p>
+          <p>📍 {`${pet.location.city}, ${pet.location.state} - ${pet.location.pincode}`}</p>
         </div>
       </div>
       <div className="main-section">
@@ -97,9 +95,6 @@ const PetDescription = () => {
           Get started
         </button>
       </div>
-
-      {/* Similar Pets Section */}
-      <SimilarPets currentPet={pet} maxPets={3} />
     </div>
   );
 };

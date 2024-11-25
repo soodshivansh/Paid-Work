@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { FaMapMarkerAlt, FaVenusMars, FaPaw, FaPalette, FaRuler, FaCat, FaDog } from 'react-icons/fa';
 import Card from "../../components/Card/Card";
 import "./AdoptPage.css";
 
@@ -7,11 +9,39 @@ const AdoptPage = () => {
   const [pets, setPets] = useState([]);
   const [filters, setFilters] = useState({
     location: "",
+    type: "",
     gender: "",
     breed: "",
     color: "",
     size: "",
   });
+  const [loading, setLoading] = useState(true);
+
+  const dogBreeds = [
+    "Labrador Retriever",
+    "German Shepherd",
+    "Golden Retriever",
+    "Bulldog",
+    "Beagle",
+    "Poodle",
+    "Rottweiler",
+    "Yorkshire Terrier",
+    "Boxer",
+    "Dachshund"
+  ];
+
+  const catBreeds = [
+    "Persian",
+    "Maine Coon",
+    "Siamese",
+    "British Shorthair",
+    "Ragdoll",
+    "Bengal",
+    "American Shorthair",
+    "Sphynx",
+    "Scottish Fold",
+    "Russian Blue"
+  ];
 
   useEffect(() => {
     const fetchPets = async () => {
@@ -19,21 +49,46 @@ const AdoptPage = () => {
         const response = await axios.get("http://localhost:8080/api/pets");
         setPets(response.data);
       } catch (error) {
-        console.error("Error fetching pets", error);
+        console.error("Error fetching pets:", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchPets();
   }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
+    setFilters(prev => {
+      // If changing pet type, reset breed
+      if (name === 'type') {
+        return {
+          ...prev,
+          [name]: value,
+          breed: ''
+        };
+      }
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  const getBreedOptions = () => {
+    if (filters.type === 'dog') {
+      return dogBreeds;
+    } else if (filters.type === 'cat') {
+      return catBreeds;
+    }
+    return [];
   };
 
   const filteredPets = pets.filter((pet) => {
-    const petLocation = pet.location ? `${pet.location.city}, ${pet.location.state}, ${pet.location.country}` : "";
     return (
-      (!filters.location || petLocation.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (!filters.location || pet.location?.city?.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (!filters.type || pet.type === filters.type) &&
       (!filters.gender || pet.gender === filters.gender) &&
       (!filters.breed || pet.breed === filters.breed) &&
       (!filters.color || pet.color === filters.color) &&
@@ -41,61 +96,124 @@ const AdoptPage = () => {
     );
   });
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
   return (
-    <div className="adopt-page flex min-h-screen bg-gray-100">
-      <div className="filters w-1/4 p-6 bg-white shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Filters</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+    <div className="adopt-page">
+      {/* Header Section */}
+      <div className="page-header">
+        <h1>Find Your Perfect Companion</h1>
+        <p>Browse through our available pets and find your new family member</p>
+      </div>
+
+      <div className="content-container">
+        {/* Filters Section */}
+        <div className="filters-section">
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaMapMarkerAlt />
+              <span>Location</span>
+            </div>
             <input
               type="text"
               name="location"
               placeholder="Search by location"
+              value={filters.location}
               onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="filter-input"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPaw />
+              <span>Pet Type</span>
+            </div>
+            <select 
+              name="type" 
+              value={filters.type}
+              onChange={handleFilterChange} 
+              className="filter-input"
+            >
+              <option value="">All Types</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPaw />
+              <span>Breed</span>
+            </div>
+            <select 
+              name="breed" 
+              value={filters.breed}
+              onChange={handleFilterChange} 
+              className="filter-input"
+              disabled={!filters.type}
+            >
+              <option value="">All Breeds</option>
+              {getBreedOptions().map((breed) => (
+                <option key={breed} value={breed.toLowerCase()}>
+                  {breed}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaVenusMars />
+              <span>Gender</span>
+            </div>
             <select 
               name="gender" 
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              value={filters.gender}
+              onChange={handleFilterChange} 
+              className="filter-input"
             >
               <option value="">All Genders</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Breed</label>
-            <select 
-              name="breed" 
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Breeds</option>
-              {/* Add breed options dynamically */}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaPalette />
+              <span>Color</span>
+            </div>
             <select 
               name="color" 
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              value={filters.color}
+              onChange={handleFilterChange} 
+              className="filter-input"
             >
               <option value="">All Colors</option>
-              {/* Add color options dynamically */}
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Brown">Brown</option>
+              <option value="Mixed">Mixed</option>
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Size</label>
+
+          <div className="filter-group">
+            <div className="filter-label">
+              <FaRuler />
+              <span>Size</span>
+            </div>
             <select 
               name="size" 
-              onChange={handleFilterChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              value={filters.size}
+              onChange={handleFilterChange} 
+              className="filter-input"
             >
               <option value="">All Sizes</option>
               <option value="Small">Small</option>
@@ -104,12 +222,31 @@ const AdoptPage = () => {
             </select>
           </div>
         </div>
-      </div>
 
-      <div className="pets-grid w-3/4 p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPets.map((pet) => (
-          <Card key={pet._id} pet={pet} />
-        ))}
+        {/* Pets Grid Section */}
+        <motion.div 
+          className="pets-section"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {loading ? (
+            <div className="loading-state">
+              <div className="loader"></div>
+            </div>
+          ) : filteredPets.length > 0 ? (
+            <div className="pets-grid">
+              {filteredPets.map((pet) => (
+                <Card key={pet._id} pet={pet} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <h3>No pets found</h3>
+              <p>Try adjusting your filters to find more pets</p>
+            </div>
+          )}
+        </motion.div>
       </div>
     </div>
   );

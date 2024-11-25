@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import UserMenu from "./UserMenu";
 
 const Navbar = ({ handleLoginPopup, user, setUser }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -13,15 +19,19 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
             <img src="./assets/paws4home_logo.png" alt="Logo" className="logo-image" />
             <span>Paws4Home</span>
           </div>
-
         </Link>
 
+        {/* Mobile Menu Button */}
+        <button className="mobile-menu-btn" onClick={toggleMenu}>
+          <i className={`fas fa-${isMenuOpen ? 'times' : 'bars'}`}></i>
+        </button>
+
         {/* Navigation Links */}
-        <ul className="nav-links">
-          <li><Link to="/adopt">Adopt</Link></li>
-          <li><Link to="/rehome">Rehome</Link></li>
-          <li><Link to="/care-guide">Care Guide</Link></li>
-          <li><Link to="/about-us">About Us</Link></li>
+        <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+          <li><Link to="/adopt" onClick={() => setIsMenuOpen(false)}>Adopt</Link></li>
+          <li><Link to="/rehome" onClick={() => setIsMenuOpen(false)}>Rehome</Link></li>
+          <li><Link to="/care-guide" onClick={() => setIsMenuOpen(false)}>Care Guide</Link></li>
+          <li><Link to="/about-us" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
         </ul>
 
         {/* Right Section */}
@@ -33,7 +43,7 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
             <UserMenu user={user} setUser={setUser} />
           ) : (
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-6 rounded-lg shadow-md hover:shadow-lg hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 transition-all duration-300"
               onClick={handleLoginPopup}
             >
               Login

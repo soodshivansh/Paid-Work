@@ -84,6 +84,7 @@ const Signup = ({ handleSignIn, onLoginSuccess }) => {
         localStorage.setItem("userInfo", JSON.stringify(response.data));
         localStorage.setItem("token", response.data.token);
         toast.success("Registration successful!");
+        onLoginSuccess();
         if (response.data.isAdmin) {
           navigate("/admin");
         } else {

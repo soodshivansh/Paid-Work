@@ -12,7 +12,6 @@ import RehomePage from "./pages/RehomePage/RehomePage";
 import LoginPopup from "./pages/LoginSignUp/loginPopUp";
 import { pets } from "./data/pets";
 import UpdateProfile from "./pages/UpdateProfile/UpdateProfile";
-import Admin from './pages/Admin/Admin';
 
 const App = () => {
   const [loginPopup, setLoginPopup] = useState(false);
@@ -40,8 +39,8 @@ const App = () => {
   return (
     <Router>
       <ToastContainer position="top-right" autoClose={3000} />
-      <Navbar handleLoginPopup={toggleLoginPopup} user={user} setUser={setUser} />;
-      <LoginPopup loginPopup={loginPopup} handleLoginPopup={toggleLoginPopup} onLoginSuccess={handleLoginSuccess} />;
+      <Navbar handleLoginPopup={toggleLoginPopup} user={user} setUser={setUser} />
+      <LoginPopup loginPopup={loginPopup} handleLoginPopup={toggleLoginPopup} onLoginSuccess={handleLoginSuccess} />
 
       <div className={loginPopup ? "blur-sm bg-black/30" : ""}>
         <main>
@@ -50,7 +49,6 @@ const App = () => {
             <Route path="/adopt" element={<AdoptPage pets={pets} />} />
             <Route path="/petDescription/:id" element={<PetDescription />} />
             <Route path="/profile" element={<UpdateProfile />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="/choose-to-adopt" element={<ChooseToAdopt />} />
             <Route path="/rehome" element={<RehomePage />} />
           </Routes>

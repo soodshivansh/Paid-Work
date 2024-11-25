@@ -1,6 +1,13 @@
 import asyncHandler from "express-async-handler";
 import User from '../Models/user.models.js';
 import generateToken from "../utils/generateToken.js"; 
+import cloudinary from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, country, state, zipCode, isAdmin } = req.body;
@@ -15,6 +22,15 @@ const registerUser = asyncHandler(async (req, res) => {
   // Convert isAdmin to boolean explicitly
   const isAdminBoolean = isAdmin === true || isAdmin === "true";
 
+  // Add profile picture if uploaded
+  let profilePicture;
+  if (req.file) {
+    const result = await cloudinary.uploader.upload(req.file.path);
+    profilePicture = result.secure_url;
+  } else {
+    profilePicture = undefined;
+  }
+
   const user = await User.create({
     name,
     email,
@@ -23,6 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
     state,
     zipCode,
     isAdmin: isAdminBoolean,
+    profilePicture
   });
 
   if (user) {
@@ -31,6 +48,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
       token: generateToken(user.id),
     });
   } else {
@@ -56,6 +74,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
       token: generateToken(user.id),
     });
   } else {
@@ -76,6 +95,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       country: user.country,
       state: user.state,
       zipCode: user.zipCode,
+      phone: user.phone,
+      profilePicture: user.profilePicture,
     });
   } else {
     res.status(404);
@@ -94,7 +115,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     if (req.body.state) user.state = req.body.state;
     if (req.body.zipCode) user.zipCode = req.body.zipCode;
     if (req.body.phone) user.phone = req.body.phone;
-    if (req.body.pic) user.pic = req.body.pic;
+    
+    // Update profile picture if uploaded
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      user.profilePicture = result.secure_url;
+    }
 
     const updatedUser = await user.save();
 
@@ -107,7 +133,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       state: updatedUser.state,
       zipCode: updatedUser.zipCode,
       phone: updatedUser.phone,
-      pic: updatedUser.pic,
+      profilePicture: updatedUser.profilePicture,
       token: generateToken(updatedUser.id),
     });
   } else {
@@ -161,6 +187,7 @@ const adminLogin = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
+    profilePicture: user.profilePicture,
     token: generateToken(user.id),
   });
 });

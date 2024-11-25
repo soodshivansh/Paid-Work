@@ -1,21 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaDog, FaCat } from 'react-icons/fa';
+import './Card.css';
 
 const Card = ({ pet }) => {
   const locationString = pet.location ? `${pet.location.city}, ${pet.location.state}, ${pet.location.country}` : "Location not available";
+  const isPetDog = pet.type?.toLowerCase() === 'dog';
+  const PetIcon = isPetDog ? FaDog : FaCat;
+
+  // Reference images directly from the `public` directory
+  const getDefaultImage = () => {
+    return isPetDog ? '/assets/demo-dog.jpg' : '/assets/demo-cat.jpg';
+  };
+
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = getDefaultImage();
+  };
 
   return (
-    <div className="card bg-white shadow-md rounded-lg overflow-hidden">
-      <img src={pet.image} alt={pet.name} className="w-full h-48 object-cover" />
-      <div className="p-4">
-        <h3 className="text-lg font-bold">{pet.name}</h3>
-        <p className="text-sm">Location: {locationString}</p>
-        <p className="text-sm">Gender: {pet.gender}</p>
-        <p className="text-sm">Breed: {pet.breed}</p>
-        <p className="text-sm">Color: {pet.color}</p>
-        <p className="text-sm">Size: {pet.size}</p>
-        <Link to={`/petDescription/${pet._id}`}>
-          <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    <div className="card bg-background-light hover:shadow-lg transition-all duration-300">
+      <div className="card-header">
+        <div className="card-image-container">
+          <img 
+            src={pet.image || getDefaultImage()} 
+            alt={`${pet.type} - ${pet.name}`} 
+            className="card-image" 
+            onError={handleImageError}
+          />
+        </div>
+        <div className="header-content">
+          <h2 className="pet-name text-primary">{pet.name}</h2>
+          <div className="pet-type bg-secondary-light text-primary">
+            <PetIcon className="pet-icon" />  
+            <span>{pet.type}</span>
+          </div>
+        </div>
+      </div>
+      <div className="card-content">
+        <div className="pet-details">
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Location:</span>
+            <span className="detail-value">{locationString}</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Gender:</span>
+            <span className="detail-value">{pet.gender}</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Breed:</span>
+            <span className="detail-value">{pet.breed}</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Color:</span>
+            <span className="detail-value">{pet.color}</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Size:</span>
+            <span className="detail-value">{pet.size}</span>
+          </div>
+        </div>
+      </div>
+      <div className="button-container bg-background-light border-t border-background-dark">
+        <Link to={`/petDescription/${pet._id}`} className="more-info-link">
+          <button className="bg-accent hover:bg-accent-light text-white transition-colors duration-300">
             More Info
           </button>
         </Link>

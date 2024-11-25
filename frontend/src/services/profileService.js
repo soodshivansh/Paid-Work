@@ -2,24 +2,6 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/api/users';
 
-// Function to upload image to Cloudinary
-const uploadImage = async (file) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'pet4home');
-
-  try {
-    const response = await axios.post(
-      'https://api.cloudinary.com/v1_1/your-cloud-name/image/upload',
-      formData
-    );
-    return response.data.secure_url;
-  } catch (error) {
-    console.error('Image upload error:', error);
-    throw new Error('Failed to upload image: ' + (error.response?.data?.message || error.message));
-  }
-};
-
 // Function to get user profile
 const getProfile = async () => {
   try {
@@ -45,27 +27,38 @@ const getProfile = async () => {
   }
 };
 
-// Function to update user profile
-const updateProfile = async (userData) => {
+// Function to update user profile with image support
+const updateProfile = async (userData, profilePicture = null) => {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Authentication token not found');
     }
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     // Don't send password updates through this function
     if (userData.password || userData.currentPassword || userData.newPassword) {
       throw new Error('Please use updatePassword function for password changes');
     }
 
-    const response = await axios.put(`${API_URL}/profile`, userData, config);
+    const formData = new FormData();
+    
+    // Append user data
+    Object.keys(userData).forEach(key => {
+      formData.append(key, userData[key]);
+    });
+
+    // Append profile picture if provided
+    if (profilePicture) {
+      formData.append('profilePicture', profilePicture);
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.put(`${API_URL}/profile`, formData, config);
     
     if (response.data) {
       const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
@@ -104,22 +97,15 @@ const updatePassword = async (passwordData) => {
       },
     };
 
-    // Use a separate endpoint for password updates
-    const response = await axios.put(`${API_URL}/change-password`, {
-      currentPassword: passwordData.currentPassword,
-      newPassword: passwordData.newPassword
-    }, config);
-    
-    if (response.data) {
-      return {
-        success: true,
-        message: 'Password updated successfully'
-      };
-    }
+    const response = await axios.put(
+      `${API_URL}/change-password`,
+      passwordData,
+      config
+    );
 
     return {
-      success: false,
-      message: 'Failed to update password'
+      success: true,
+      message: response.data.message || 'Password updated successfully'
     };
   } catch (error) {
     console.error('Password update error:', error);
@@ -127,4 +113,4 @@ const updatePassword = async (passwordData) => {
   }
 };
 
-export { getProfile, updateProfile, updatePassword, uploadImage };
+export { getProfile, updateProfile, updatePassword };
