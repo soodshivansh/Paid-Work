@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import UserMenu from "./UserMenu";
 
 const Navbar = ({ handleLoginPopup, user, setUser }) => {
+  const location = useLocation();
+  const isUpdateProfilePage = location.pathname === '/update-profile';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -11,7 +13,7 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isUpdateProfilePage ? 'transparent-nav' : ''}`}>
       <div className="navbar-container">
         {/* Logo */}
         <Link to="/">

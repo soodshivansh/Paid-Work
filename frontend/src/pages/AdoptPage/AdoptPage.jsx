@@ -35,15 +35,14 @@ const AdoptPage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const location = useLocation();
 
-useEffect(() => {
-  // Immediately fetch pets when navigating from rehoming page
-  if (location.state?.fromRehoming) {
-    fetchPetsData(setLoading, setPets);
-  }
-}, [location]);
+  useEffect(() => {
+    // Immediately fetch pets when navigating from rehoming page
+    if (location.state?.fromRehoming) {
+      fetchPetsData(setLoading, setPets);
+    }
+  }, [location]);
 
   const dogBreeds = [
     "Labrador Retriever",
@@ -99,6 +98,10 @@ useEffect(() => {
     };
 
     fetchPets();
+  }, []);
+
+  useEffect(() => {
+    fetchPetsData(setLoading, setPets);
   }, []);
 
   const resetFilters = () => {
@@ -171,28 +174,33 @@ useEffect(() => {
     }
   };
 
-  useEffect(() => {
-    const fetchPets = () => fetchPetsData(setLoading, setPets);
-    fetchPets();
-    
-    // Set up polling to check for new pets every 30 seconds
-    const pollInterval = setInterval(fetchPets, 30000);
-    
-    return () => clearInterval(pollInterval);
-  }, []);
-
   return (
     <div className="adopt-page">
-      {/* Header Section */}
-      <div className="page-header">
+      <motion.div 
+        className="page-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <h1>Find Your Perfect Companion</h1>
         <p>Browse through our available pets and find your new family member</p>
-      </div>
+      </motion.div>
 
       <div className="content-container">
-        {/* Filters Section */}
-        <div className="filters-section">
-          <div className="filters-header">
+        <motion.div 
+          className="filters-section"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.div 
+            className="filters-header"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
             <h2>
               <FaFilter />
               Filter Pets
@@ -204,9 +212,15 @@ useEffect(() => {
               <FaUndo />
               Reset Filters
             </button>
-          </div>
+          </motion.div>
           
-          <div className="filter-groups-container">
+          <motion.div 
+            className="filter-groups-container"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
             <div className="filter-group">
               <div className="filter-label">
                 <FaMapMarkerAlt />
@@ -314,10 +328,9 @@ useEffect(() => {
                 <option value="Large">Large</option>
               </select>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Pets Grid Section */}
         <motion.div 
           className="pets-section"
           variants={containerVariants}
@@ -339,16 +352,40 @@ useEffect(() => {
               </button>
             </div>
           ) : filteredPets.length > 0 ? (
-            <div className="pets-grid">
-              {filteredPets.map((pet) => (
-                <Card key={pet._id} pet={pet} />
+            <motion.div 
+              className="pets-grid"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+            >
+              {filteredPets.map((pet, index) => (
+                <motion.div
+                  key={pet._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.5,
+                    delay: index * 0.1, // Stagger the animations
+                    ease: "easeOut"
+                  }}
+                >
+                  <Card pet={pet} />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           ) : (
-            <div className="empty-state">
+            <motion.div 
+              className="empty-state"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               <h3>No pets found</h3>
               <p>Try adjusting your filters to find more pets</p>
-            </div>
+            </motion.div>
           )}
         </motion.div>
       </div>

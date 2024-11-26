@@ -19,7 +19,9 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 1.2 }}
           >
-            Find Your Perfect
+            Find Your
+            <br />
+            Purr-fect
             <br />
             <motion.span 
               className="highlight"
