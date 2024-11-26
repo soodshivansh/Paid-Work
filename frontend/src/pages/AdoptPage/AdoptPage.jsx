@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaVenusMars, FaPaw, FaPalette, FaRuler, FaCat, FaDog } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaVenusMars, FaPaw, FaPalette, FaRuler, FaCat, FaDog, FaFilter, FaUndo } from 'react-icons/fa';
 import Card from "../../components/Card/Card";
 import "./AdoptPage.css";
 import { useLocation } from 'react-router-dom';
@@ -34,6 +34,7 @@ const AdoptPage = () => {
     size: "",
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const location = useLocation();
 
@@ -70,6 +71,47 @@ useEffect(() => {
     "Russian Blue"
   ];
 
+  const colors = [
+    "Black",
+    "White",
+    "Brown",
+    "Gray",
+    "Cream",
+    "Golden",
+    "Mixed",
+    "Spotted",
+    "Tabby",
+    "Calico"
+  ];
+
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        setError(null);
+        const response = await axios.get("http://localhost:8080/api/pets");
+        setPets(response.data);
+      } catch (error) {
+        setError("Failed to fetch pets. Please try again later.");
+        console.error("Error fetching pets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPets();
+  }, []);
+
+  const resetFilters = () => {
+    setFilters({
+      location: "",
+      type: "",
+      gender: "",
+      breed: "",
+      color: "",
+      size: "",
+    });
+  };
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => {
@@ -98,14 +140,27 @@ useEffect(() => {
   };
 
   const filteredPets = pets.filter((pet) => {
-    return (
-      (!filters.location || pet.location?.city?.toLowerCase().includes(filters.location.toLowerCase())) &&
-      (!filters.type || pet.type === filters.type) &&
-      (!filters.gender || pet.gender === filters.gender) &&
-      (!filters.breed || pet.breed === filters.breed) &&
-      (!filters.color || pet.color === filters.color) &&
-      (!filters.size || pet.size === filters.size)
-    );
+    const locationMatch = !filters.location || 
+      pet.location?.city?.toLowerCase().includes(filters.location.toLowerCase()) ||
+      pet.location?.state?.toLowerCase().includes(filters.location.toLowerCase());
+    
+    const typeMatch = !filters.type || 
+      pet.type.toLowerCase() === filters.type.toLowerCase();
+    
+    const genderMatch = !filters.gender || 
+      pet.gender.toLowerCase() === filters.gender.toLowerCase();
+    
+    const breedMatch = !filters.breed || 
+      pet.breed.toLowerCase() === filters.breed.toLowerCase();
+    
+    const colorMatch = !filters.color || 
+      pet.color.toLowerCase() === filters.color.toLowerCase();
+    
+    const sizeMatch = !filters.size || 
+      pet.size.toLowerCase() === filters.size.toLowerCase();
+
+    return locationMatch && typeMatch && genderMatch && 
+           breedMatch && colorMatch && sizeMatch;
   });
 
   const containerVariants = {
@@ -137,111 +192,128 @@ useEffect(() => {
       <div className="content-container">
         {/* Filters Section */}
         <div className="filters-section">
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaMapMarkerAlt />
-              <span>Location</span>
-            </div>
-            <input
-              type="text"
-              name="location"
-              placeholder="Search by location"
-              value={filters.location}
-              onChange={handleFilterChange}
-              className="filter-input"
-            />
-          </div>
-
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaPaw />
-              <span>Pet Type</span>
-            </div>
-            <select 
-              name="type" 
-              value={filters.type}
-              onChange={handleFilterChange} 
-              className="filter-input"
+          <div className="filters-header">
+            <h2>
+              <FaFilter />
+              Filter Pets
+            </h2>
+            <button 
+              onClick={resetFilters}
+              className="reset-filters-btn"
             >
-              <option value="">All Types</option>
-              <option value="dog">Dog</option>
-              <option value="cat">Cat</option>
-            </select>
+              <FaUndo />
+              Reset Filters
+            </button>
           </div>
-
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaPaw />
-              <span>Breed</span>
+          
+          <div className="filter-groups-container">
+            <div className="filter-group">
+              <div className="filter-label">
+                <FaMapMarkerAlt />
+                <span>Location</span>
+              </div>
+              <input
+                type="text"
+                name="location"
+                placeholder="Search by city or state"
+                value={filters.location}
+                onChange={handleFilterChange}
+                className="filter-input"
+              />
             </div>
-            <select 
-              name="breed" 
-              value={filters.breed}
-              onChange={handleFilterChange} 
-              className="filter-input"
-              disabled={!filters.type}
-            >
-              <option value="">All Breeds</option>
-              {getBreedOptions().map((breed) => (
-                <option key={breed} value={breed.toLowerCase()}>
-                  {breed}
-                </option>
-              ))}
-            </select>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaVenusMars />
-              <span>Gender</span>
+            <div className="filter-group">
+              <div className="filter-label">
+                {filters.type === 'dog' ? <FaDog /> : filters.type === 'cat' ? <FaCat /> : <FaPaw />}
+                <span>Pet Type</span>
+              </div>
+              <select 
+                name="type" 
+                value={filters.type}
+                onChange={handleFilterChange} 
+                className="filter-input"
+              >
+                <option value="">All Types</option>
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+              </select>
             </div>
-            <select 
-              name="gender" 
-              value={filters.gender}
-              onChange={handleFilterChange} 
-              className="filter-input"
-            >
-              <option value="">All Genders</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaPalette />
-              <span>Color</span>
+            <div className="filter-group">
+              <div className="filter-label">
+                <FaPaw />
+                <span>Breed</span>
+              </div>
+              <select 
+                name="breed" 
+                value={filters.breed}
+                onChange={handleFilterChange} 
+                className="filter-input"
+                disabled={!filters.type}
+              >
+                <option value="">All Breeds</option>
+                {getBreedOptions().map((breed) => (
+                  <option key={breed} value={breed.toLowerCase()}>
+                    {breed}
+                  </option>
+                ))}
+              </select>
             </div>
-            <select 
-              name="color" 
-              value={filters.color}
-              onChange={handleFilterChange} 
-              className="filter-input"
-            >
-              <option value="">All Colors</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Brown">Brown</option>
-              <option value="Mixed">Mixed</option>
-            </select>
-          </div>
 
-          <div className="filter-group">
-            <div className="filter-label">
-              <FaRuler />
-              <span>Size</span>
+            <div className="filter-group">
+              <div className="filter-label">
+                <FaVenusMars />
+                <span>Gender</span>
+              </div>
+              <select 
+                name="gender" 
+                value={filters.gender}
+                onChange={handleFilterChange} 
+                className="filter-input"
+              >
+                <option value="">All Genders</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
-            <select 
-              name="size" 
-              value={filters.size}
-              onChange={handleFilterChange} 
-              className="filter-input"
-            >
-              <option value="">All Sizes</option>
-              <option value="Small">Small</option>
-              <option value="Medium">Medium</option>
-              <option value="Large">Large</option>
-            </select>
+
+            <div className="filter-group">
+              <div className="filter-label">
+                <FaPalette />
+                <span>Color</span>
+              </div>
+              <select 
+                name="color" 
+                value={filters.color}
+                onChange={handleFilterChange} 
+                className="filter-input"
+              >
+                <option value="">All Colors</option>
+                {colors.map((color) => (
+                  <option key={color} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <div className="filter-label">
+                <FaRuler />
+                <span>Size</span>
+              </div>
+              <select 
+                name="size" 
+                value={filters.size}
+                onChange={handleFilterChange} 
+                className="filter-input"
+              >
+                <option value="">All Sizes</option>
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -255,6 +327,16 @@ useEffect(() => {
           {loading ? (
             <div className="loading-state">
               <div className="loader"></div>
+            </div>
+          ) : error ? (
+            <div className="error-state">
+              <p>{error}</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="retry-btn"
+              >
+                Retry
+              </button>
             </div>
           ) : filteredPets.length > 0 ? (
             <div className="pets-grid">

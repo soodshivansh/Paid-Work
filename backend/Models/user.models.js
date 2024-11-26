@@ -27,15 +27,11 @@ const userSchema = mongoose.Schema(
         validator: function(v) {
           // Only validate password if it's being modified
           if (!this.isModified('password')) return true;
-          return /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v);
+          return /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(v);
         },
-        message: "Password must contain at least one uppercase letter, one number, and one special character"
+        message: "Password must contain at least one uppercase letter, one number, and one special character (including dots)"
       }
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
+    },    
     profilePicture: {
       type: String,
       required: true,
