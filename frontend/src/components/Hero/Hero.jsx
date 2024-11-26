@@ -12,12 +12,12 @@ const Hero = () => {
           className="hero-content"
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.2 }}
         >
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
+            transition={{ delay: 0.4, duration: 1.2 }}
           >
             Find Your Perfect
             <br />
@@ -25,7 +25,7 @@ const Hero = () => {
               className="highlight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
+              transition={{ delay: 0.8, duration: 1.2 }}
             >
               Furry Companion
             </motion.span>
@@ -33,7 +33,7 @@ const Hero = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
+            transition={{ delay: 1.2, duration: 1.2 }}
           >
             Every pet deserves a loving home. Join us in making a difference 
             by adopting or rehoming a pet. Your new best friend is waiting!
@@ -42,7 +42,7 @@ const Hero = () => {
             className="buttons"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
+            transition={{ delay: 1.6, duration: 1.2 }}
           >
             <Link to="/adopt">
               <motion.button 
@@ -63,26 +63,6 @@ const Hero = () => {
               </motion.button>
             </Link>
           </motion.div>
-          
-          <motion.div 
-            className="stats"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 0.8 }}
-          >
-            <div className="stat-item">
-              <h3>1000+</h3>
-              <p>Pets Adopted</p>
-            </div>
-            <div className="stat-item">
-              <h3>500+</h3>
-              <p>Happy Families</p>
-            </div>
-            <div className="stat-item">
-              <h3>50+</h3>
-              <p>Partner Shelters</p>
-            </div>
-          </motion.div>
         </motion.div>
 
         {/* Right Content (Image) */}
@@ -90,7 +70,7 @@ const Hero = () => {
           className="hero-image"
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.2 }}
         >
           <motion.div 
             className="image-container"
@@ -98,7 +78,7 @@ const Hero = () => {
               y: [0, -10, 0],
             }}
             transition={{ 
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
               ease: "easeInOut"
             }}

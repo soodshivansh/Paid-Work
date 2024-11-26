@@ -24,9 +24,9 @@ const PetDescription = () => {
         setPet(data);
       } catch (err) {
         console.error("Error fetching pet data:", err);
-        setError(err.message); // Capture error
+        setError(err.message);
       } finally {
-        setLoading(false); // Stop loading regardless of success or error
+        setLoading(false);
       }
     };
 
@@ -34,28 +34,33 @@ const PetDescription = () => {
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>; // Show loading while fetching data
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>Error: {error}</p>; // Display error message if API fails
+    return <p>Error: {error}</p>;
   }
 
   if (!pet) {
-    return <p>No pet details available</p>; // Handle case where pet is not found
+    return <p>No pet details available</p>;
   }
 
   return (
     <div className="pet-description">
       <div className="header">
-        <h1>Hi Human!</h1>
+        <h1>Meet {pet.name}!</h1>
         <div className="petDetails">
           <div>
             <img src={pet.photos[0]} alt={pet.name} className="main-image" />
           </div>
-          <div>
+          <div className="pet-header-info">
             <h2>{pet.name}</h2>
-            <p>Pet ID: {pet._id}</p>
+            <div className="basic-details">
+              <p><strong>Type:</strong> {pet.type}</p>
+              <p><strong>Age:</strong> {pet.age} years</p>
+              <p><strong>Gender:</strong> {pet.gender}</p>
+              <p><strong>Breed:</strong> {pet.breed}</p>
+            </div>
           </div>
         </div>
         <div className="location">
@@ -63,36 +68,91 @@ const PetDescription = () => {
           <p>📍 {`${pet.location.city}, ${pet.location.state} - ${pet.location.pincode}`}</p>
         </div>
       </div>
+
       <div className="main-section">
         <div className="image-section">
           <img src={pet.photos[0]} alt={pet.name} className="main-image" />
           <div className="thumbnail-section">
             {pet.photos.map((photo, i) => (
-              <img key={i} src={photo} alt={`Thumbnail ${i}`} className="thumbnail" />
+              <img key={i} src={photo} alt={`${pet.name} - Photo ${i + 1}`} className="thumbnail" />
             ))}
           </div>
         </div>
 
-        <div className="story">
-          <h3>{pet.name}'s Story</h3>
-          <p>{pet.story}</p>
-          <ul>
-            {pet.vaccinated && <li>Vaccinated</li>}
-            {pet.houseTrained && <li>House-trained</li>}
-            {pet.neutered && <li>Neutered</li>}
-            {pet.microchipped && <li>Microchipped</li>}
-          </ul>
+        <div className="info-section">
+          <div className="story">
+            <h3>{pet.name}'s Story</h3>
+            <p>{pet.story}</p>
+          </div>
+
+          <div className="health-info">
+            <h3>Health & Training</h3>
+            <ul>
+              <li className={pet.vaccinated ? 'active' : ''}>
+                <span className="icon">💉</span>
+                <span className="label">Vaccinated</span>
+                <span className="value">{pet.vaccinated ? 'Yes' : 'No'}</span>
+              </li>
+              <li className={pet.houseTrained ? 'active' : ''}>
+                <span className="icon">🏠</span>
+                <span className="label">House-trained</span>
+                <span className="value">{pet.houseTrained ? 'Yes' : 'No'}</span>
+              </li>
+              <li className={pet.neutered ? 'active' : ''}>
+                <span className="icon">✂️</span>
+                <span className="label">Neutered/Spayed</span>
+                <span className="value">{pet.neutered ? 'Yes' : 'No'}</span>
+              </li>
+              <li className={pet.microchipped ? 'active' : ''}>
+                <span className="icon">🔍</span>
+                <span className="label">Microchipped</span>
+                <span className="value">{pet.microchipped ? 'Yes' : 'No'}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="physical-info">
+            <h3>Physical Characteristics</h3>
+            <ul>
+              <li>
+                <span className="icon">📏</span>
+                <span className="label">Size</span>
+                <span className="value">{pet.size}</span>
+              </li>
+              <li>
+                <span className="icon">⚖️</span>
+                <span className="label">Weight</span>
+                <span className="value">{pet.weight} kg</span>
+              </li>
+              <li>
+                <span className="icon">📏</span>
+                <span className="label">Height</span>
+                <span className="value">{pet.height} cm</span>
+              </li>
+              <li>
+                <span className="icon">🎨</span>
+                <span className="label">Color</span>
+                <span className="value">{pet.color}</span>
+              </li>
+            </ul>
+          </div>
+
+          {pet.medicalHistory && (
+            <div className="medical-history">
+              <h3>Medical History</h3>
+              <p>{pet.medicalHistory}</p>
+            </div>
+          )}
         </div>
       </div>
-      <PetInfo petDetails={mapPetToDetails(pet)} />
 
       <div className="adopt-prompt">
-        <p>If you are interested to adopt</p>
+        <p>Interested in giving {pet.name} a forever home?</p>
         <button 
           className="get-started-button" 
           onClick={() => navigate('/choose-to-adopt', { state: { petId: id } })}
         >
-          Get started
+          Start Adoption Process
         </button>
       </div>
     </div>

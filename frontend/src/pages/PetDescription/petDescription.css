@@ -30,43 +30,59 @@ body {
 .header h1 {
   font-size: 2.2rem;
   color: #333;
+  margin-bottom: 20px;
 }
 
-.petDetails{
+.petDetails {
   display: flex;
   gap: 30px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.pet-header-info {
+  flex: 1;
+}
+
+.pet-header-info h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #6200ea;
+}
+
+.basic-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.basic-details p {
+  font-size: 1rem;
+  color: #666;
 }
 
 /* Image Section */
 .image-section {
-  text-align: center;
-  width: 70%  ;
-  margin-bottom: 0px;
-}
-.main-section{
-  display: flex;
-  gap: 30px;
-  margin-bottom: 30px;
+  width: 50%;
+  margin-right: 30px;
 }
 
-.image-section .main-image {
+.main-image {
   width: 100%;
   max-width: 800px;
   border-radius: 10px;
   margin-bottom: 15px;
+  object-fit: cover;
 }
 
 .thumbnail-section {
   display: flex;
-  justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .thumbnail {
-  width: 200px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
   border: 1px solid #ddd;
@@ -78,44 +94,150 @@ body {
   transform: scale(1.1);
 }
 
-/* Story Section */
-.story {
-  margin: 0;
-  background-color: #f9f9f9;
-  padding: 30px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  width: 30%;
+/* Info Section */
+.info-section {
+  width: 50%;
 }
 
-.story h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+.story, .health-info, .physical-info, .medical-history {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.story h3, .health-info h3, .physical-info h3, .medical-history h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #6200ea;
 }
 
 .story p {
   font-size: 1rem;
   color: #666;
-  margin-bottom: 10px;
+  line-height: 1.6;
 }
 
-.story ul {
-  list-style-type: none;
-  padding: 0;
+/* Health Info and Physical Info Lists */
+.health-info ul, .physical-info ul {
+  list-style: none;
 }
 
-.story ul li {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 8px;
+.health-info li, .physical-info li {
   display: flex;
   align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.story ul li::before {
-  content: '✔';
-  margin-right: 10px;
-  color: green;
+.health-info li:last-child, .physical-info li:last-child {
+  border-bottom: none;
+}
+
+.health-info li.active {
+  color: #4caf50;
+}
+
+.icon {
+  font-size: 1.2rem;
+  margin-right: 15px;
+  width: 24px;
+  text-align: center;
+}
+
+.label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.value {
+  color: #666;
+}
+
+/* Location Section */
+.location {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.location p {
+  color: #666;
+  margin: 5px 0;
+}
+
+.location p:last-child {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Adopt Prompt */
+.adopt-prompt {
+  text-align: center;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.adopt-prompt p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.get-started-button {
+  background-color: #6200ea;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.get-started-button:hover {
+  background-color: #3700b3;
+}
+
+/* Medical History Section */
+.medical-history {
+  background-color: #fff3e0;
+}
+
+.medical-history p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-section {
+    flex-direction: column;
+  }
+
+  .image-section,
+  .info-section {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .basic-details {
+    grid-template-columns: 1fr;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 /* Similar Pets Section */
@@ -126,7 +248,8 @@ body {
 .similar-pets h1 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-text-align: center;  color: #333;
+  text-align: center;
+  color: #333;
 }
 
 .pet-cards {
@@ -172,7 +295,7 @@ text-align: center;  color: #333;
 }
 
 .moreInfoButton {
-  background-color:#6200ea ;
+  background-color: #6200ea;
   color: #ffffff;
   padding: 10px 15px;
   border-width: 1PX;
@@ -187,7 +310,6 @@ text-align: center;  color: #333;
   background-color: #3700b3;
 }
 
-
 .adopt-prompt {
   display: flex;
   flex-direction: column;
@@ -198,7 +320,7 @@ text-align: center;  color: #333;
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #fff;
-  margin: 30px auto ;
+  margin: 30px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 

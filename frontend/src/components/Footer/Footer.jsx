@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaPaw, FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import "./Footer.css";
 
 const Footer = () => {
@@ -25,10 +25,10 @@ const Footer = () => {
       <div className="footer-container">
         {/* Brand Section */}
         <div className="footer-brand">
-          <div className="footer-logo">
-            <FaPaw className="footer-logo-icon" />
+          <Link to="/" className="footer-logo">
+            <img src="./assets/paws4home_logo.png" alt="Paws4Home Logo" className="footer-logo-image" />
             <span>Paws4Home</span>
-          </div>
+          </Link>
           <p className="footer-description">
             Finding loving homes for pets in need. Join us in making a difference 
             in the lives of animals looking for their forever families.
@@ -52,45 +52,45 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Help Section */}
-        <div className="footer-section">
-          <h4>Help & Support</h4>
-          <ul>
-            <motion.li whileHover={{ x: 5 }}><Link to="/adopt-faqs">Adoption FAQs</Link></motion.li>
-            <motion.li whileHover={{ x: 5 }}><Link to="/rehoming-faqs">Rehoming FAQs</Link></motion.li>
-            <motion.li whileHover={{ x: 5 }}><Link to="/terms">Terms of Service</Link></motion.li>
-            <motion.li whileHover={{ x: 5 }}><Link to="/privacy">Privacy Policy</Link></motion.li>
-          </ul>
-        </div>
-
         {/* Contact Section */}
         <div className="footer-section">
           <h4>Contact Us</h4>
-          <div className="contact-info">
-            <FaMapMarkerAlt className="contact-icon" />
-            <span>Chitkara University, Rajpura</span>
-          </div>
-          <div className="contact-info">
-            <FaPhone className="contact-icon" />
-            <span>+91 9876543210</span>
-          </div>
-          <div className="contact-info">
-            <FaEnvelope className="contact-icon" />
-            <span>support@paws4home.com</span>
-          </div>
+          <ul className="contact-info">
+            <li>
+              <FaMapMarkerAlt />
+              <span>Chitkara Univeristy, Rajpura, Punjab 140401</span>
+            </li>
+            <li>
+              <FaPhone />
+              <span>+91 9876543211</span>
+            </li>
+            <li>
+              <FaEnvelope />
+              <span>info@paws4home.com</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="footer-section">
+          <h4>Newsletter</h4>
+          <p>Subscribe to our newsletter for updates on available pets and pet care tips.</p>
+          <form className="newsletter-form">
+            <input type="email" placeholder="Enter your email" />
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="submit"
+            >
+              Subscribe
+            </motion.button>
+          </form>
         </div>
       </div>
 
-      {/* Bottom Footer */}
+      {/* Bottom Bar */}
       <div className="footer-bottom">
-        <div className="footer-bottom-content">
-          <p>&copy; 2024 Paws4Home. All rights reserved.</p>
-          <div className="footer-bottom-links">
-            <Link to="/terms">Terms</Link>
-            <Link to="/privacy">Privacy</Link>
-            <Link to="/cookies">Cookies</Link>
-          </div>
-        </div>
+        <p>&copy; 2023 Paws4Home. All rights reserved.</p>
       </div>
     </motion.footer>
   );

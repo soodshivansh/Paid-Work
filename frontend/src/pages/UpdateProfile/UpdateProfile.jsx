@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { FaEdit, FaUser, FaEye, FaEyeSlash, FaCamera, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaUser, FaEye, FaEyeSlash, FaCamera, FaCheck, FaTimes, FaPaw } from 'react-icons/fa';
 import { getProfile, updateProfile, updatePassword } from '../../services/profileService';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -201,16 +201,111 @@ const UpdateProfile = () => {
       </label>
       <div className="flex items-center gap-2">
         {editingField === field ? (
-          <>
+          <React.Fragment>
             <input
               type="text"
               value={tempValue}
               onChange={(e) => setTempValue(e.target.value)}
               disabled={isLoading}
-              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
             <button
               onClick={() => handleSaveField(field)}
+              disabled={isLoading}
+              className="p-2 text-purple-600 hover:text-purple-700"
+            >
+              <FaCheck />
+            </button>
+            <button
+              onClick={handleCancelEdit}
+              disabled={isLoading}
+              className="p-2 text-red-600 hover:text-red-700"
+            >
+              <FaTimes />
+            </button>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <input
+              type="text"
+              value={formData[field]}
+              disabled
+              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
+            />
+            {!disabled && (
+              <button
+                onClick={() => handleEditField(field)}
+                disabled={isLoading}
+                className="p-2 text-purple-600 hover:text-purple-700"
+              >
+                <FaEdit />
+              </button>
+            )}
+          </React.Fragment>
+        )}
+      </div>
+    </div>
+  );
+
+  const handleEditStateAndPincode = () => {
+    setEditingField('stateAndPincode');
+    setTempValue({ state: formData.state, pincode: formData.pincode });
+  };
+  
+  const handleSaveStateAndPincode = async () => {
+    const { state, pincode } = tempValue;
+    if (!state.trim() || !pincode.trim()) {
+      toast.error('State and Pincode cannot be empty');
+      return;
+    }
+  
+    setIsLoading(true);
+    try {
+      const updateData = { state, zipCode: pincode };
+      const response = await updateProfile(updateData);
+      if (response.success) {
+        setFormData(prev => ({ ...prev, state, pincode }));
+        toast.success('Profile updated successfully');
+        setEditingField(null);
+        setTempValue('');
+      } else {
+        toast.error(response.message || 'Update failed');
+      }
+    } catch (error) {
+      console.error('Update field error:', error);
+      toast.error(error.message || 'Failed to update field');
+      if (error.message.includes('Authentication')) {
+        navigate('/login');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const renderStateAndPincodeFields = () => (
+    <div className="relative">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        State and Pincode
+      </label>
+      <div className="flex items-center gap-2">
+        {editingField === 'stateAndPincode' ? (
+          <>
+            <input
+              type="text"
+              value={tempValue.state}
+              onChange={(e) => setTempValue(prev => ({ ...prev, state: e.target.value }))}
+              disabled={isLoading}
+              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            />
+            <input
+              type="text"
+              value={tempValue.pincode}
+              onChange={(e) => setTempValue(prev => ({ ...prev, pincode: e.target.value }))}
+              disabled={isLoading}
+              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            />
+            <button
+              onClick={handleSaveStateAndPincode}
               disabled={isLoading}
               className="p-2 text-green-600 hover:text-green-700"
             >
@@ -228,298 +323,205 @@ const UpdateProfile = () => {
           <>
             <input
               type="text"
-              value={formData[field]}
+              value={formData.state}
               disabled
               className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
             />
-            {!disabled && (
-              <button
-                onClick={() => handleEditField(field)}
-                disabled={isLoading}
-                className="p-2 text-blue-600 hover:text-blue-700"
-              >
-                <FaEdit />
-              </button>
-            )}
+            <input
+              type="text"
+              value={formData.pincode}
+              disabled
+              className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
+            />
+            <button
+              onClick={handleEditStateAndPincode}
+              disabled={isLoading}
+              className="p-2 text-purple-600 hover:text-purple-700"
+            >
+              <FaEdit />
+            </button>
           </>
         )}
       </div>
     </div>
   );
-const handleEditStateAndPincode = () => {
-  setEditingField('stateAndPincode');
-  setTempValue({ state: formData.state, pincode: formData.pincode });
-};
-
-const handleSaveStateAndPincode = async () => {
-  const { state, pincode } = tempValue;
-  if (!state.trim() || !pincode.trim()) {
-    toast.error('State and Pincode cannot be empty');
-    return;
-  }
-
-  setIsLoading(true);
-  try {
-    const updateData = { state, zipCode: pincode };
-    const response = await updateProfile(updateData);
-    if (response.success) {
-      setFormData(prev => ({ ...prev, state, pincode }));
-      toast.success('Profile updated successfully');
-      setEditingField(null);
-      setTempValue('');
-    } else {
-      toast.error(response.message || 'Update failed');
-    }
-  } catch (error) {
-    console.error('Update field error:', error);
-    toast.error(error.message || 'Failed to update field');
-    if (error.message.includes('Authentication')) {
-      navigate('/login');
-    }
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-const renderStateAndPincodeFields = () => (
-  <div className="relative">
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      State and Pincode
-    </label>
-    <div className="flex items-center gap-2">
-      {editingField === 'stateAndPincode' ? (
-        <>
-          <input
-            type="text"
-            value={tempValue.state}
-            onChange={(e) => setTempValue(prev => ({ ...prev, state: e.target.value }))}
-            disabled={isLoading}
-            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <input
-            type="text"
-            value={tempValue.pincode}
-            onChange={(e) => setTempValue(prev => ({ ...prev, pincode: e.target.value }))}
-            disabled={isLoading}
-            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <button
-            onClick={handleSaveStateAndPincode}
-            disabled={isLoading}
-            className="p-2 text-green-600 hover:text-green-700"
-          >
-            <FaCheck />
-          </button>
-          <button
-            onClick={handleCancelEdit}
-            disabled={isLoading}
-            className="p-2 text-red-600 hover:text-red-700"
-          >
-            <FaTimes />
-          </button>
-        </>
-      ) : (
-        <>
-          <input
-            type="text"
-            value={formData.state}
-            disabled
-            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
-          />
-          <input
-            type="text"
-            value={formData.pincode}
-            disabled
-            className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 bg-gray-50"
-          />
-          <button
-            onClick={handleEditStateAndPincode}
-            disabled={isLoading}
-            className="p-2 text-blue-600 hover:text-blue-700"
-          >
-            <FaEdit />
-          </button>
-        </>
-      )}
-    </div>
-  </div>
-);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header Section */}
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-6">
-            <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
+    <div 
+      className="min-h-screen py-8 px-4 relative"
+      style={{
+        backgroundImage: ' url("/assets/pawsbackground.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-purple-100/10 to-purple-100/10" />
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden"
+        >
+          <div className="bg-purple-600 p-6">
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+              <FaPaw /> Profile Settings
+            </h1>
           </div>
 
-          {/* Profile Picture Section */}
-          <div className="relative -mt-16 flex justify-center px-8">
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="relative group"
-            >
-              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white">
-                {profilePic ? (
-                  <img
-                    src={profilePic}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <FaUser className="w-16 h-16 text-gray-400" />
-                  </div>
-                )}
-              </div>
-              <label className="absolute inset-0 flex items-center justify-center cursor-pointer group">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleProfilePicChange}
-                  disabled={isLoading}
+          <div className="p-6">
+            {/* Profile Picture */}
+            <div className="flex items-center gap-6 mb-8">
+              <div className="relative">
+                <img
+                  src={profilePic || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-purple-100"
                 />
-                <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                  <FaCamera className="text-white text-2xl" />
-                </div>
-              </label>
-            </motion.div>
-          </div>
+                <label className="absolute bottom-0 right-0 bg-purple-500 p-2 rounded-full cursor-pointer hover:bg-purple-600 transition-colors">
+                  <FaCamera className="text-white" />
+                  <input type="file" className="hidden" accept="image/*" onChange={handleProfilePicChange} />
+                </label>
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">{formData.name}</h2>
+                <p className="text-gray-500">{formData.email}</p>
+              </div>
+            </div>
 
-          {/* Form Section */}
-          <div className="p-8 pt-4 space-y-6">
-            {renderField('name', 'Name')}
-            {renderField('email', 'Email', true)}
-            {renderField('phone', 'Phone')}
-            {renderStateAndPincodeFields()}
-            {renderField('country', 'Country', true)}
+            {/* Form Section */}
+            <div className="space-y-4 border-t border-gray-200 pt-6 pb-6">
+              {renderField('name', 'Name')}
+              {renderField('email', 'Email', true)}
+              {renderField('phone', 'Phone')}
+              {renderStateAndPincodeFields()}
+              {renderField('country', 'Country', true)}
+            </div>
 
             {/* Password Change Section */}
-            <div className="mt-8 pt-6 border-t">
-              {!showPasswordSection ? (
-                <button
-                  onClick={() => setShowPasswordSection(true)}
-                  className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors duration-200"
-                >
-                  Change Password
-                </button>
-              ) : (
-                <form onSubmit={handlePasswordChange} className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-900">Change Password</h3>
-                  
-                  {/* Current Password */}
-                  <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Current Password
-                    </label>
-                    <div className="relative mt-1">
-                      <input
-                        type={showCurrentPassword ? "text" : "password"}
-                        value={formData.currentPassword}
-                        onChange={(e) => setFormData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                        disabled={isLoading}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                      >
-                        {showCurrentPassword ? (
-                          <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        ) : (
-                          <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* New Password */}
-                  <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700">
-                      New Password
-                    </label>
-                    <div className="relative mt-1">
-                      <input
-                        type={showNewPassword ? "text" : "password"}
-                        value={formData.newPassword}
-                        onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
-                        disabled={isLoading}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                      >
-                        {showNewPassword ? (
-                          <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        ) : (
-                          <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Confirm Password */}
-                  <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Confirm New Password
-                    </label>
-                    <div className="relative mt-1">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                        disabled={isLoading}
-                        className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
-                      />
-                      <button
-                        type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      >
-                        {showConfirmPassword ? (
-                          <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        ) : (
-                          <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button
-                      type="submit"
+            {!showPasswordSection ? (
+              <button
+                onClick={() => setShowPasswordSection(true)}
+                className="w-full py-2 px-4 border border-purple-500 text-purple-500 rounded-lg hover:bg-purple-50 transition-colors duration-200"
+              >
+                Change Password
+              </button>
+            ) : (
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900">Change Password</h3>
+                
+                {/* Current Password */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Current Password
+                  </label>
+                  <div className="relative mt-1">
+                    <input
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={formData.currentPassword}
+                      onChange={(e) => setFormData(prev => ({ ...prev, currentPassword: e.target.value }))}
                       disabled={isLoading}
-                      className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                    >
-                      {isLoading ? 'Updating...' : 'Update Password'}
-                    </button>
+                      className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
+                    />
                     <button
                       type="button"
-                      onClick={() => {
-                        setShowPasswordSection(false);
-                        setFormData(prev => ({
-                          ...prev,
-                          currentPassword: '',
-                          newPassword: '',
-                          confirmPassword: '',
-                        }));
-                      }}
-                      className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                     >
-                      Cancel
+                      {showCurrentPassword ? (
+                        <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      )}
                     </button>
                   </div>
-                </form>
-              )}
-            </div>
+                </div>
+
+                {/* New Password */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700">
+                    New Password
+                  </label>
+                  <div className="relative mt-1">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={formData.newPassword}
+                      onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
+                      disabled={isLoading}
+                      className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? (
+                        <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Confirm New Password
+                  </label>
+                  <div className="relative mt-1">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                      disabled={isLoading}
+                      className="block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 pr-10"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? (
+                        <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50"
+                  >
+                    {isLoading ? 'Updating...' : 'Update Password'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowPasswordSection(false);
+                      setFormData(prev => ({
+                        ...prev,
+                        currentPassword: '',
+                        newPassword: '',
+                        confirmPassword: '',
+                      }));
+                    }}
+                    className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

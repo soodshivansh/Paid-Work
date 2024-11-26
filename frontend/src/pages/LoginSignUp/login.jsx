@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { login, googleLogin } from "../../services/authService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios";
-import { googleLogin } from "../../services/authService";
 
 const Login = ({ handleSignIn, onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleGoogleLogin = async (response) => {
     try {
@@ -29,7 +28,7 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
   useEffect(() => {
     const loadGoogleSignIn = () => {
       window.google.accounts.id.initialize({
-        client_id: "848737705738-laneat8dbes0590enbmv0alhcm048g3q.apps.googleusercontent.com",
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: handleGoogleLogin,
         auto_select: false,
         context: 'signin'
@@ -50,10 +49,10 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
     script.async = true;
     script.defer = true;
     script.onload = loadGoogleSignIn;
-    document.head.appendChild(script);
+    document.body.appendChild(script);
 
     return () => {
-      document.head.removeChild(script);
+      document.body.removeChild(script);
     };
   }, []);
 
@@ -63,142 +62,105 @@ const Login = ({ handleSignIn, onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      setLoading(true);
-      const endpoint = '/api/users/login';
-      const response = await axios.post(
-        `http://localhost:8080${endpoint}`,
-        formData
-      );
-      
-      if (response.data) {
-        localStorage.setItem("userInfo", JSON.stringify(response.data));
-        localStorage.setItem("token", response.data.token);
-        toast.success("Login successful!");
-        onLoginSuccess();
-        navigate("/");
-      }
+      await login(formData);
+      toast.success("Login successful!");
+      onLoginSuccess();
+      navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Invalid credentials");
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <motion.h1 
-        className="text-3xl font-bold text-gray-800 text-center mb-8"
-        initial={{ opacity: 0, y: -20 }}
+    <div className="flex items-center justify-center min-h-full">
+    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md my-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ delay: 0.1 }}
+        className="relative"
       >
-        Welcome Back
-      </motion.h1>
+        <label className="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          placeholder="Enter your email"
+          className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        />
+      </motion.div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-        <div className="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label htmlFor="email-address" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email address"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <FaEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                ) : (
-                  <FaEyeSlash className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col space-y-4">
-          <motion.button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="relative"
+      >
+        <label className="block text-sm font-medium text-gray-700 my-auto">Password</label>
+        <div className="mt-1 relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            placeholder="Enter your password"
+            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Logging in...
-              </span>
+            {showPassword ? (
+              <FaEyeSlash className="h-5 w-5 text-gray-400" />
             ) : (
-              'Login'
+              <FaEye className="h-5 w-5 text-gray-400" />
             )}
-          </motion.button>
+          </button>
         </div>
-      </form>
-      
-      <div className="mt-6">
-        <div className="relative">
+      </motion.div>
+
+      <div className="space-y-4">
+        <motion.button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-1.5 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={loading}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {loading ? "Logging in..." : "Log in"}
+        </motion.button>
+
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-white text-gray-500">Or continue with</span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="mt-6">
-          <div id="googleLoginButton" className="flex justify-center"></div>
-        </div>
+        {/* <div id="googleLoginButton" className="w-full"></div> */}
+
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <button
+            type="button"
+            onClick={handleSignIn}
+            className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition-colors"
+          >
+            Sign up
+          </button>
+        </p>
       </div>
-
-      <motion.p
-        className="mt-8 text-center text-sm text-gray-600"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        Don't have an account?{" "}
-        <button
-          type="button"
-          className="font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:underline transition-colors"
-          onClick={handleSignIn}
-        >
-          Sign up
-        </button>
-      </motion.p>
+    </form>
     </div>
   );
 };

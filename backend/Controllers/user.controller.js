@@ -10,7 +10,7 @@ cloudinary.config({
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, country, state, zipCode, isAdmin } = req.body;
+  const { name, email, password, country, state, zipCode } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -18,9 +18,6 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User already exists");
   }
-
-  // Convert isAdmin to boolean explicitly
-  const isAdminBoolean = isAdmin === true || isAdmin === "true";
 
   // Add profile picture if uploaded
   let profilePicture;
@@ -38,7 +35,6 @@ const registerUser = asyncHandler(async (req, res) => {
     country,
     state,
     zipCode,
-    isAdmin: isAdminBoolean,
     profilePicture
   });
 
@@ -47,7 +43,6 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
       profilePicture: user.profilePicture,
       token: generateToken(user.id),
     });
@@ -58,22 +53,15 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password, isAdmin } = req.body;
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    // Check if trying to login as admin
-    if (isAdmin && !user.isAdmin) {
-      res.status(401);
-      throw new Error("Not authorized as admin");
-    }
-
     res.json({
       _id: user.id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
       profilePicture: user.profilePicture,
       token: generateToken(user.id),
     });
@@ -91,7 +79,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
       country: user.country,
       state: user.state,
       zipCode: user.zipCode,
@@ -128,7 +115,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
       country: updatedUser.country,
       state: updatedUser.state,
       zipCode: updatedUser.zipCode,
@@ -166,37 +152,10 @@ const changePassword = asyncHandler(async (req, res) => {
   });
 });
 
-// Admin login endpoint
-const adminLogin = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (!user || !(await user.matchPassword(password))) {
-    res.status(401);
-    throw new Error("Invalid email or password");
-  }
-
-  if (!user.isAdmin) {
-    res.status(403);
-    throw new Error("Not authorized as admin");
-  }
-
-  res.json({
-    _id: user.id,
-    name: user.name,
-    email: user.email,
-    isAdmin: user.isAdmin,
-    profilePicture: user.profilePicture,
-    token: generateToken(user.id),
-  });
-});
-
 export {
   registerUser,
   authUser,
   getUserProfile,
   updateUserProfile,
   changePassword,
-  adminLogin,
 };
