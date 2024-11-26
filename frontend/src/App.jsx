@@ -12,6 +12,7 @@ import RehomePage from "./pages/RehomePage/RehomePage";
 import LoginPopup from "./pages/LoginSignUp/loginPopUp";
 import { pets } from "./data/pets";
 import UpdateProfile from "./pages/UpdateProfile/UpdateProfile";
+import ChooseToRehome from '../src/pages/ChooseToRehome/ChooseToRehome';
 
 const App = () => {
   const [loginPopup, setLoginPopup] = useState(false);
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/profile" element={<UpdateProfile />} />
             <Route path="/choose-to-adopt" element={<ChooseToAdopt />} />
             <Route path="/rehome" element={<RehomePage />} />
+            <Route path="/choose-to-rehome" element={<ChooseToRehome />} />
           </Routes>
         </main>
         <Footer />

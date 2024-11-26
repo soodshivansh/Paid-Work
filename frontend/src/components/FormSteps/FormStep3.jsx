@@ -1,35 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
+import { refreshPetsList } from "../../pages/AdoptPage/AdoptPage";
 import "./FormStep3.css";
 
-const FormStep3 = () => {
+const FormStep3 = ({ onSubmit }) => {
+  const [loading, setLoading] = useState(false);
+  const [pets, setPets] = useState([]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await onSubmit(event);
+      // Refresh the pets list to show the new pet
+      await refreshPetsList(setLoading, setPets);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
   return (
-    <div className="form-step-container">
-    <h2 className="form-title">Home Details</h2>
-    <div className="form-content-wrapper">
-      <p className="form-question">Do you have a garden? *</p>
-      <div className="radio-section">
-        <label>
-          <input type="radio" name="garden" />
-          Yes
-        </label>
-        <label>
-          <input type="radio" name="garden" />
-          No
-        </label>
+    <form onSubmit={handleSubmit} className="form-step-container">
+      <h2 className="form-title">Pet Health Information</h2>
+      <div className="health-grid">
+        <div className="health-item">
+          <label>Is your pet vaccinated? *</label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="vaccinated" value="true" required />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="vaccinated" value="false" required />
+              No
+            </label>
+          </div>
+        </div>
+
+        <div className="health-item">
+          <label>Is your pet neutered/spayed? *</label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="neutered" value="true" required />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="neutered" value="false" required />
+              No
+            </label>
+          </div>
+        </div>
+
+        <div className="health-item">
+          <label>Is your pet microchipped? *</label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="microchipped" value="true" required />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="microchipped" value="false" required />
+              No
+            </label>
+          </div>
+        </div>
+
+        <div className="health-item">
+          <label>Is your pet house trained? *</label>
+          <div className="radio-group">
+            <label>
+              <input type="radio" name="houseTrained" value="true" required />
+              Yes
+            </label>
+            <label>
+              <input type="radio" name="houseTrained" value="false" required />
+              No
+            </label>
+          </div>
+        </div>
       </div>
-      <div className="dropdown-section">
-        <select>
-          <option>Please describe your living/home situation *</option>
-        </select>
-        <select>
-          <option>Can you describe your household setting *</option>
-        </select>
-        <select>
-          <option>Can you describe the household's typical activity level *</option>
-        </select>
+
+      <div className="medical-history">
+        <label>Medical History (if any)</label>
+        <textarea 
+          placeholder="Please share any medical conditions, allergies, or special care requirements..."
+        />
       </div>
-      </div>
-    </div>
+    </form>
   );
 };
 

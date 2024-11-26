@@ -4,6 +4,24 @@ import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaVenusMars, FaPaw, FaPalette, FaRuler, FaCat, FaDog } from 'react-icons/fa';
 import Card from "../../components/Card/Card";
 import "./AdoptPage.css";
+import { useLocation } from 'react-router-dom';
+
+// Define fetchPets outside the component so it can be exported
+const fetchPetsData = async (setLoading, setPets) => {
+  try {
+    setLoading(true);
+    const response = await axios.get("http://localhost:8080/api/pets");
+    // Sort pets by creation date to show newest first
+    const sortedPets = response.data.sort((a, b) => 
+      new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    setPets(sortedPets);
+  } catch (error) {
+    console.error("Error fetching pets:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
 const AdoptPage = () => {
   const [pets, setPets] = useState([]);
@@ -16,6 +34,15 @@ const AdoptPage = () => {
     size: "",
   });
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
+
+useEffect(() => {
+  // Immediately fetch pets when navigating from rehoming page
+  if (location.state?.fromRehoming) {
+    fetchPetsData(setLoading, setPets);
+  }
+}, [location]);
 
   const dogBreeds = [
     "Labrador Retriever",
@@ -42,21 +69,6 @@ const AdoptPage = () => {
     "Scottish Fold",
     "Russian Blue"
   ];
-
-  useEffect(() => {
-    const fetchPets = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/pets");
-        setPets(response.data);
-      } catch (error) {
-        console.error("Error fetching pets:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPets();
-  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -103,6 +115,16 @@ const AdoptPage = () => {
       transition: { staggerChildren: 0.1 }
     }
   };
+
+  useEffect(() => {
+    const fetchPets = () => fetchPetsData(setLoading, setPets);
+    fetchPets();
+    
+    // Set up polling to check for new pets every 30 seconds
+    const pollInterval = setInterval(fetchPets, 30000);
+    
+    return () => clearInterval(pollInterval);
+  }, []);
 
   return (
     <div className="adopt-page">
@@ -252,4 +274,6 @@ const AdoptPage = () => {
   );
 };
 
+// Export both the component and the fetch function
+export const refreshPetsList = (setLoading, setPets) => fetchPetsData(setLoading, setPets);
 export default AdoptPage;

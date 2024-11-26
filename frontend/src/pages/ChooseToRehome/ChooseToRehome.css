@@ -1,0 +1,290 @@
+.choose-to-rehome {
+  font-family: 'Montserrat', sans-serif;
+  color: #27496d;
+  padding: 20px;
+}
+
+.progress-bar img {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: block;
+}
+
+.step-content {
+  text-align: left;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.step-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.step-content .description {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.user-details p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.primary-questions label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.primary-questions input,
+.primary-questions select {
+  margin-left: 10px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.image-box {
+  border: 2px dashed #6c63ff;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5643c8;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+/* Characteristics Form */
+.characteristics-form label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.characteristics-form input,
+.characteristics-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Key Facts Form */
+.key-facts-form .fact-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.key-facts-form .radio-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Location Form */
+.location-form label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.location-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+/* Steps 7-9 Styling */
+.step-content {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.step-content input,
+.step-content textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  margin-bottom: 20px;
+}
+
+.step-content input:focus,
+.step-content textarea:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.step-content textarea {
+  min-height: 150px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.step-content label {
+  display: block;
+  font-weight: 600;
+  color: #27496d;
+  margin: 15px 0 8px;
+  font-size: 1.1rem;
+}
+
+.step-content h2 {
+  color: #27496d;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+  border-bottom: 3px solid #6c63ff;
+  padding-bottom: 10px;
+}
+/* Story Form - Step 7 */
+.story-form textarea {
+  width: 100%;
+  min-height: 120px;
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.description {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Document Upload - Step 8 */
+.document-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.document-box {
+  border: 2px dashed #6c63ff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.upload-area {
+  position: relative;
+  padding: 30px 20px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.upload-area input[type="file"] {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-area p {
+  color: #666;
+  margin: 0;
+}
+
+/* Confirmation Page - Step 9 */
+.confirmation-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+.confirmation-content h3 {
+  color: #27496d;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.next-steps {
+  text-align: left;
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.next-steps h4 {
+  color: #27496d;
+  margin-bottom: 15px;
+}
+
+.next-steps ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.next-steps li {
+  margin: 10px 0;
+  padding-left: 25px;
+  position: relative;
+}
+
+.next-steps li:before {
+  content: "•";
+  color: #6c63ff;
+  position: absolute;
+  left: 0;
+}
+
+.contact-info {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.contact-info p {
+  margin: 5px 0;
+  color: #666;
+}

@@ -8,7 +8,6 @@ const Card = ({ pet }) => {
   const isPetDog = pet.type?.toLowerCase() === 'dog';
   const PetIcon = isPetDog ? FaDog : FaCat;
 
-  // Reference images directly from the `public` directory
   const getDefaultImage = () => {
     return isPetDog ? '/assets/demo-dog.jpg' : '/assets/demo-cat.jpg';
   };
@@ -23,7 +22,7 @@ const Card = ({ pet }) => {
       <div className="card-header">
         <div className="card-image-container">
           <img 
-            src={pet.image || getDefaultImage()} 
+            src={pet.photos?.[0] || getDefaultImage()} 
             alt={`${pet.type} - ${pet.name}`} 
             className="card-image" 
             onError={handleImageError}
@@ -40,6 +39,10 @@ const Card = ({ pet }) => {
       <div className="card-content">
         <div className="pet-details">
           <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Age:</span>
+            <span className="detail-value">{pet.age} years</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
             <span className="detail-label text-secondary-dark">Location:</span>
             <span className="detail-value">{locationString}</span>
           </div>
@@ -52,12 +55,12 @@ const Card = ({ pet }) => {
             <span className="detail-value">{pet.breed}</span>
           </div>
           <div className="detail-item border-b border-background-dark">
-            <span className="detail-label text-secondary-dark">Color:</span>
-            <span className="detail-value">{pet.color}</span>
-          </div>
-          <div className="detail-item border-b border-background-dark">
             <span className="detail-label text-secondary-dark">Size:</span>
             <span className="detail-value">{pet.size}</span>
+          </div>
+          <div className="detail-item border-b border-background-dark">
+            <span className="detail-label text-secondary-dark">Weight:</span>
+            <span className="detail-value">{pet.weight} kg</span>
           </div>
         </div>
       </div>

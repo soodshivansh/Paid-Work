@@ -29,11 +29,11 @@ const ChooseToAdopt = () => {
         return <FormStep2 />;
       case 2:
         return <FormStep3 />;
-        case 3:
+      case 3:
         return <FormStep4 />;
-        case 4:
+      case 4:
         return <FormStep5 />;
-        case 5:
+      case 5:
         return <FormStep6 />;
       default:
         return <h2>Other content for step {currentStep + 1}</h2>;
@@ -42,7 +42,6 @@ const ChooseToAdopt = () => {
 
   return (
     <div className="choose-to-adopt">
-
       {/* Progress Bar */}
       <div className="progress-bar">
         <img
