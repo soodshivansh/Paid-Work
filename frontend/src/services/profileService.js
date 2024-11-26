@@ -44,7 +44,9 @@ const updateProfile = async (userData, profilePicture = null) => {
     
     // Append user data
     Object.keys(userData).forEach(key => {
-      formData.append(key, userData[key]);
+      if (key !== 'profilePicture') {
+        formData.append(key, userData[key]);
+      }
     });
 
     // Append profile picture if provided

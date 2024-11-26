@@ -38,9 +38,6 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
 
         {/* Right Section */}
         <div className="nav-right">
-          <button className="notification-btn">
-            <i className="bell-icon"></i>
-          </button>
           {user ? (
             <UserMenu user={user} setUser={setUser} />
           ) : (

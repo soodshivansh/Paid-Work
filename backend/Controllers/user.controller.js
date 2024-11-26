@@ -113,18 +113,20 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    console.log('Getting user profile. Profile picture in DB:', user?.profilePicture);
-
+    const user = await User.findById(req.user._id);
     if (user) {
-      const profilePictureUrl = getProfilePictureUrl(req, user.profilePicture);
-      console.log('Generated profile picture URL:', profilePictureUrl);
-
+      const userResponse = user.toObject();
+      userResponse.profilePicture = getProfilePictureUrl(req, userResponse.profilePicture);
+      
       res.json({
-        _id: user.id,
-        name: user.name,
-        email: user.email,
-        profilePicture: profilePictureUrl,
+        _id: userResponse._id,
+        name: userResponse.name,
+        email: userResponse.email,
+        phone: userResponse.phone || '',
+        state: userResponse.state || '',
+        zipCode: userResponse.zipCode || '',
+        country: userResponse.country || 'India',
+        profilePicture: userResponse.profilePicture,
       });
     } else {
       res.status(404);
@@ -132,7 +134,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.error('Error in getUserProfile:', error);
-    throw error;
+    res.status(404);
+    throw new Error("User not found");
   }
 });
 
