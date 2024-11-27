@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './petDescription.css';
-import PetInfo from '../../components/PetInfo/petInfo';
-import { mapPetToDetails } from '../../utils/petUtils';
+import { 
+  FaPaw, FaBirthdayCake, FaVenus, FaMars, FaMapMarkerAlt, 
+  FaSyringe, FaHome, FaClinicMedical, FaRuler, FaWeight,
+  FaPalette, FaGlobe, FaCut, FaSearch
+} from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const PetDescription = () => {
   const [pet, setPet] = useState(null);
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeImage, setActiveImage] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,11 +20,9 @@ const PetDescription = () => {
     const fetchPet = async () => {
       try {
         const response = await fetch(`http://localhost:8080/api/pets/${id}`);
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const data = await response.json();
         setPet(data);
       } catch (err) {
@@ -29,133 +32,253 @@ const PetDescription = () => {
         setLoading(false);
       }
     };
-
     fetchPet();
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="loading-container">
+        <motion.div
+          className="loading-paw"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 10, -10, 0],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+          }}
+        >
+          <FaPaw />
+        </motion.div>
+        <p>Finding your future friend...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return (
+      <div className="error-container">
+        <FaPaw className="error-icon" />
+        <h2>Oops! Something went wrong</h2>
+        <p>{error}</p>
+        <button onClick={() => navigate('/adopt')}>Back to Adoption Page</button>
+      </div>
+    );
   }
 
   if (!pet) {
-    return <p>No pet details available</p>;
+    return (
+      <div className="not-found-container">
+        <FaPaw className="not-found-icon" />
+        <h2>Pet Not Found</h2>
+        <p>We couldn't find the pet you're looking for.</p>
+        <button onClick={() => navigate('/adopt')}>Discover Other Pets</button>
+      </div>
+    );
   }
 
-  return (
-    <div className="pet-description">
-      <div className="header">
-        <h1>Meet {pet.name}!</h1>
-        <div className="petDetails">
-          <div>
-            <img src={pet.photos[0]} alt={pet.name} className="main-image" />
-          </div>
-          <div className="pet-header-info">
-            <h2>{pet.name}</h2>
-            <div className="basic-details">
-              <p><strong>Type:</strong> {pet.type}</p>
-              <p><strong>Age:</strong> {pet.age} years</p>
-              <p><strong>Gender:</strong> {pet.gender}</p>
-              <p><strong>Breed:</strong> {pet.breed}</p>
-            </div>
-          </div>
-        </div>
-        <div className="location">
-          <p>{pet.location.country}</p>
-          <p>📍 {`${pet.location.city}, ${pet.location.state} - ${pet.location.pincode}`}</p>
-        </div>
-      </div>
+  const getGenderIcon = (gender) => {
+    return gender.toLowerCase() === 'male' ? <FaMars className="gender-icon male" /> : <FaVenus className="gender-icon female" />;
+  };
 
-      <div className="main-section">
-        <div className="image-section">
-          <img src={pet.photos[0]} alt={pet.name} className="main-image" />
-          <div className="thumbnail-section">
-            {pet.photos.map((photo, i) => (
-              <img key={i} src={photo} alt={`${pet.name} - Photo ${i + 1}`} className="thumbnail" />
+  return (
+    <motion.div 
+      className="pet-description-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="pet-gallery-section">
+        <motion.div 
+          className="main-image-container"
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <img 
+            src={pet.photos[activeImage]} 
+            alt={pet.name} 
+            className="main-image" 
+          />
+          <div className="image-navigation">
+            {pet.photos.map((_, index) => (
+              <motion.div
+                key={index}
+                className={`nav-dot ${index === activeImage ? 'active' : ''}`}
+                onClick={() => setActiveImage(index)}
+                whileHover={{ scale: 1.2 }}
+              />
             ))}
           </div>
+        </motion.div>
+        
+        <div className="thumbnails-container">
+          {pet.photos.map((photo, index) => (
+            <motion.div
+              key={index}
+              className={`thumbnail-wrapper ${index === activeImage ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setActiveImage(index)}
+            >
+              <img src={photo} alt={`${pet.name} - ${index + 1}`} />
+            </motion.div>
+          ))}
         </div>
 
-        <div className="info-section">
-          <div className="story">
-            <h3>{pet.name}'s Story</h3>
-            <p>{pet.story}</p>
-          </div>
-
-          <div className="health-info">
-            <h3>Health & Training</h3>
-            <ul>
-              <li className={pet.vaccinated ? 'active' : ''}>
-                <span className="icon">💉</span>
-                <span className="label">Vaccinated</span>
-                <span className="value">{pet.vaccinated ? 'Yes' : 'No'}</span>
-              </li>
-              <li className={pet.houseTrained ? 'active' : ''}>
-                <span className="icon">🏠</span>
-                <span className="label">House-trained</span>
-                <span className="value">{pet.houseTrained ? 'Yes' : 'No'}</span>
-              </li>
-              <li className={pet.neutered ? 'active' : ''}>
-                <span className="icon">✂️</span>
-                <span className="label">Neutered/Spayed</span>
-                <span className="value">{pet.neutered ? 'Yes' : 'No'}</span>
-              </li>
-              <li className={pet.microchipped ? 'active' : ''}>
-                <span className="icon">🔍</span>
-                <span className="label">Microchipped</span>
-                <span className="value">{pet.microchipped ? 'Yes' : 'No'}</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="physical-info">
-            <h3>Physical Characteristics</h3>
-            <ul>
-              <li>
-                <span className="icon">📏</span>
-                <span className="label">Size</span>
-                <span className="value">{pet.size}</span>
-              </li>
-              <li>
-                <span className="icon">⚖️</span>
-                <span className="label">Weight</span>
-                <span className="value">{pet.weight} kg</span>
-              </li>
-              <li>
-                <span className="icon">📏</span>
-                <span className="label">Height</span>
-                <span className="value">{pet.height} cm</span>
-              </li>
-              <li>
-                <span className="icon">🎨</span>
-                <span className="label">Color</span>
-                <span className="value">{pet.color}</span>
-              </li>
-            </ul>
-          </div>
-
-          {pet.medicalHistory && (
-            <div className="medical-history">
-              <h3>Medical History</h3>
-              <p>{pet.medicalHistory}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="adopt-prompt">
-        <p>Interested in giving {pet.name} a forever home?</p>
-        <button 
-          className="get-started-button" 
-          onClick={() => navigate('/choose-to-adopt', { state: { petId: id } })}
+        <motion.div 
+          className="location-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
         >
-          Start Adoption Process
-        </button>
+          <FaGlobe className="location-icon" />
+          <div className="location-details">
+            <h3>Location</h3>
+            <p>{pet.location.country}</p>
+            <p>{`${pet.location.city}, ${pet.location.state}`}</p>
+            <p>{pet.location.pincode}</p>
+          </div>
+        </motion.div>
       </div>
-    </div>
+
+      <div className="pet-info-section">
+        <div className="pet-header">
+          <motion.h1
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {pet.name} {getGenderIcon(pet.gender)}
+          </motion.h1>
+          <div className="type-badge">
+            <FaPaw />
+            <span>{pet.type}</span>
+          </div>
+        </div>
+
+        <div className="info-grid">
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaPaw />
+            <h3>Breed</h3>
+            <p>{pet.breed}</p>
+          </motion.div>
+          
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaBirthdayCake />
+            <h3>Age</h3>
+            <p>{pet.age} years</p>
+          </motion.div>
+
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaRuler />
+            <h3>Size</h3>
+            <p>{pet.size}</p>
+          </motion.div>
+
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaWeight />
+            <h3>Weight</h3>
+            <p>{pet.weight} kg</p>
+          </motion.div>
+
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaPalette />
+            <h3>Color</h3>
+            <p>{pet.color}</p>
+          </motion.div>
+
+          <motion.div className="info-card" whileHover={{ scale: 1.05 }}>
+            <FaRuler />
+            <h3>Height</h3>
+            <p>{pet.height} cm</p>
+          </motion.div>
+        </div>
+
+        <div className="pet-story-section">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2>My Story</h2>
+            <p>{pet.story}</p>
+          </motion.div>
+        </div>
+
+        <div className="health-training-section">
+          <h2>Health & Training</h2>
+          <div className="status-grid">
+            <motion.div 
+              className={`status-card ${pet.vaccinated ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+            >
+              <FaSyringe />
+              <h3>Vaccinated</h3>
+              <p>{pet.vaccinated ? 'Yes' : 'No'}</p>
+            </motion.div>
+
+            <motion.div 
+              className={`status-card ${pet.houseTrained ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+            >
+              <FaHome />
+              <h3>House Trained</h3>
+              <p>{pet.houseTrained ? 'Yes' : 'No'}</p>
+            </motion.div>
+
+            <motion.div 
+              className={`status-card ${pet.neutered ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+            >
+              <FaCut />
+              <h3>Neutered/Spayed</h3>
+              <p>{pet.neutered ? 'Yes' : 'No'}</p>
+            </motion.div>
+
+            <motion.div 
+              className={`status-card ${pet.microchipped ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+            >
+              <FaSearch />
+              <h3>Microchipped</h3>
+              <p>{pet.microchipped ? 'Yes' : 'No'}</p>
+            </motion.div>
+          </div>
+        </div>
+
+        {pet.medicalHistory && (
+          <div className="medical-history-section">
+            <h2>Medical History</h2>
+            <motion.div 
+              className="medical-card"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <FaClinicMedical />
+              <p>{pet.medicalHistory}</p>
+            </motion.div>
+          </div>
+        )}
+
+        <motion.div 
+          className="adoption-cta"
+          whileHover={{ scale: 1.02 }}
+        >
+          <h2>Ready to Welcome {pet.name} Home?</h2>
+          <p>Start your adoption journey today!</p>
+          <motion.button
+            className="adopt-button"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/choose-to-adopt', { state: { petId: id } })}
+          >
+            Start Adoption Process
+          </motion.button>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 

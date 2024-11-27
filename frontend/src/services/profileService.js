@@ -44,7 +44,9 @@ const updateProfile = async (userData, profilePicture = null) => {
     
     // Append user data
     Object.keys(userData).forEach(key => {
-      formData.append(key, userData[key]);
+      if (key !== 'profilePicture') {
+        formData.append(key, userData[key]);
+      }
     });
 
     // Append profile picture if provided
@@ -55,29 +57,17 @@ const updateProfile = async (userData, profilePicture = null) => {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     };
 
     const response = await axios.put(`${API_URL}/profile`, formData, config);
-    
-    if (response.data) {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-      const updatedUserInfo = { ...userInfo, ...response.data };
-      localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
-      
-      return {
-        success: true,
-        message: 'Profile updated successfully',
-        user: response.data
-      };
-    }
-
     return {
-      success: false,
-      message: 'Failed to update profile'
+      success: true,
+      user: response.data
     };
   } catch (error) {
-    console.error('Profile update error:', error);
+    console.error('Update profile error:', error);
     throw new Error(error.response?.data?.message || 'Failed to update profile');
   }
 };
@@ -92,8 +82,8 @@ const updatePassword = async (passwordData) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     };
 
@@ -105,10 +95,10 @@ const updatePassword = async (passwordData) => {
 
     return {
       success: true,
-      message: response.data.message || 'Password updated successfully'
+      message: response.data.message
     };
   } catch (error) {
-    console.error('Password update error:', error);
+    console.error('Update password error:', error);
     throw new Error(error.response?.data?.message || 'Failed to update password');
   }
 };

@@ -28,7 +28,7 @@ const ReviewAndFAQ = () => {
         <h2  style={{
           fontSize: "2.5rem",
           fontWeight: "800",
-          color: "#27496d",
+          color: "#362B85",
           fontFamily: "'Montserrat', sans-serif",
           textAlign: "center", // Optional for centering
           margin: "30px 0",
@@ -55,7 +55,7 @@ const ReviewAndFAQ = () => {
         <h2  style={{
             fontSize: "2.5rem",
             fontWeight: "800",
-            color: "#27496d",
+            color: "#362B85",
             fontFamily: "'Montserrat', sans-serif",
             textAlign: "center", // Optional for centering
             margin: "30px 0",

@@ -1,10 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import "./Footer.css";
 
 const Footer = () => {
+  const location = useLocation();
+  const isUpdateProfilePage = location.pathname === '/update-profile';
+
   const footerVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { 
@@ -16,7 +19,7 @@ const Footer = () => {
 
   return (
     <motion.footer 
-      className="footer"
+      className={`footer ${isUpdateProfilePage ? 'transparent-footer' : ''}`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -69,22 +72,6 @@ const Footer = () => {
               <span>info@paws4home.com</span>
             </li>
           </ul>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="footer-section">
-          <h4>Newsletter</h4>
-          <p>Subscribe to our newsletter for updates on available pets and pet care tips.</p>
-          <form className="newsletter-form">
-            <input type="email" placeholder="Enter your email" />
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              type="submit"
-            >
-              Subscribe
-            </motion.button>
-          </form>
         </div>
       </div>
 

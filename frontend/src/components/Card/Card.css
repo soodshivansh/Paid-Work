@@ -9,7 +9,7 @@
   width: 300px !important;
   min-width: 300px;
   max-width: 300px;
-  height: 750px;
+  height: 800px;
   font-family: 'Montserrat', sans-serif;
   transition: all 0.3s ease;
   margin: 20px;
@@ -81,7 +81,6 @@
 .card-content {
   padding: 24px;
   flex: 1;
-  overflow-y: auto;
 }
 
 .pet-details {
@@ -166,5 +165,20 @@
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .card {
+    width: 280px !important;
+    min-width: 280px;
+    max-width: 280px;
+    margin: 15px;
+  }
+
+  .card-image-container {
+    width: 180px;
+    height: 180px;
   }
 }

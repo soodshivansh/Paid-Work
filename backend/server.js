@@ -9,6 +9,9 @@ import { errorHandler } from './Middlewares/errorHandler.js';
 import { handleUploadError } from './services/upload.service.js';
 import { handleError } from './utils/error.js';
 import cors from "cors";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
@@ -18,15 +21,36 @@ connectDB();
 
 const app = express();
 
+// Get directory name in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads', 'user');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log(`Created uploads directory at: ${uploadsDir}`);
+}
+
 // Middleware
 app.use(express.json());
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const corsOptions = {
   origin: "http://localhost:3000", 
   methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 };
 
 app.use(cors(corsOptions));
+
+// Log all incoming requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Routes
 app.use('/api/pets', petRoutes);

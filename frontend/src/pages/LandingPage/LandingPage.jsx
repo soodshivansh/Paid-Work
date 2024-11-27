@@ -3,6 +3,7 @@ import axios from "axios";
 import Hero from "../../components/Hero/Hero";
 import Card from "../../components/Card/Card";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import "./LandingPage.css";
 import ReviewAndFAQ from "../../components/ReviewandFAQ/ReviewandFAQ";
 
@@ -28,92 +29,147 @@ const LandingPage = () => {
     fetchPets();
   }, []);
 
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const scaleIn = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
   return (
-    <div>
+    <div className="landing-page">
       <Hero />
-      <section className="pets-section">
-        <h1
+      
+      <motion.section 
+        className="pets-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+      >
+        <motion.h1
+          variants={scaleIn}
           style={{
             fontSize: "2.5rem",
             fontWeight: "800",
-            color: "#27496d",
+            color: "#362B85",
             fontFamily: "'Montserrat', sans-serif",
             textAlign: "center",
             margin: "30px 0",
           }}
         >
           Take a Look at Some of Our Pets
-        </h1>
+        </motion.h1>
 
-        <div className="card-container">
+        <motion.div 
+          className="card-container"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {loading ? (
             <div className="loading">Loading pets...</div>
           ) : error ? (
             <div className="error">{error}</div>
           ) : (
-            pets.map((pet) => (
-              <Card key={pet._id} pet={pet} />
+            pets.map((pet, index) => (
+              <motion.div
+                key={pet._id}
+                variants={fadeInUp}
+                custom={index}
+              >
+                <Card pet={pet} />
+              </motion.div>
             ))
           )}
-        </div>
-        <Link to="/adopt">
-          <button className="see-more-button">See More</button>
-        </Link>
-      </section>
+        </motion.div>
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <Link to="/adopt">
+            <button className="see-more-button">See More</button>
+          </Link>
+        </motion.div>
+      </motion.section>
 
-      <section className="how-it-works">
-        <h1
-          style={{
-            fontSize: "2.5rem",
-            fontWeight: "800",
-            color: "#27496d",
-            fontFamily: "'Montserrat', sans-serif",
-            textAlign: "center",
-            margin: "30px 0",
-          }}
+      <motion.section 
+        className="how-it-works"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+      >
+        <motion.h1
+          variants={scaleIn}
         >
           Adopt or Rehome a pet in just 3 easy steps!
-        </h1>
+        </motion.h1>
 
-        <div className="how-it-works">
-          <div className="steps-container">
-            <div className="step">
-              <div className="step-box">
-                <i className="fa fa-user icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
-                <span className="step-number">1</span>
-                <p style={{
-                  fontSize: "1.1 rem",
-                  fontWeight: "500",
-                  fontFamily: "'Montserrat', sans-serif",
-                }}>Set up your profile in minutes</p>
-              </div>
-            </div>
-            <div className="step">
-              <div className="step-box">
-                <i className="fa fa-home icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
-                <span className="step-number">2</span>
-                <p style={{
-                  fontSize: "1.1 rem",
-                  fontWeight: "500",
-                  fontFamily: "'Montserrat', sans-serif",
-                }}>Describe your home and routine so rehomer can see if it's the right fit</p>
-              </div>
-            </div>
-            <div className="step">
-              <div className="step-box">
-                <i className="fa fa-search icon" style={{ fontSize: "2.5rem", color: "#6c63ff" }}></i>
-                <span className="step-number">3</span>
-                <p style={{
-                  fontSize: "1.1 rem",
-                  fontWeight: "500",
-                  fontFamily: "'Montserrat', sans-serif",
-                }}>Start your search!</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <ReviewAndFAQ />
+        <motion.div 
+          className="steps-container"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {[1, 2, 3].map((step, index) => (
+            <motion.div 
+              key={step}
+              className="step"
+              variants={fadeInUp}
+              custom={index}
+            >
+              <motion.div 
+                className="step-box"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <i className={`fa fa-${index === 0 ? 'user' : index === 1 ? 'home' : 'heart'} icon`}></i>
+                <span className="step-number">{step}</span>
+                <p>
+                  {index === 0 ? 'Set up your profile in minutes' :
+                   index === 1 ? "Describe your home and routine so rehomer can see if it's the right fit" :
+                   'Connect with pet owners and find your perfect match'}
+                </p>
+              </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.section>
+
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeInUp}
+      >
+        <ReviewAndFAQ />
+      </motion.section>
     </div>
   );
 };

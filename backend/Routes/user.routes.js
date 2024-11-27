@@ -8,7 +8,7 @@ import {
 } from "../Controllers/user.controller.js";
 import { googleAuth } from "../Controllers/googleAuth.controller.js";
 import { protect } from "../Middlewares/authMiddleware.js";
-import { upload } from '../config/cloudinary.js';
+import upload from '../config/multer.js';
 
 const router = express.Router();
 

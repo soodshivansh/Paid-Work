@@ -6,13 +6,18 @@ import Navbar from "./components/Navbar/Navbar";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import AdoptPage from "./pages/AdoptPage/AdoptPage";
 import Footer from "./components/Footer/Footer";
-import PetDescription from '../src/pages/PetDescription/petDescription';
-import ChooseToAdopt from '../src/pages/ChooseToAdopt/ChooseToAdopt';
+import PetDescription from './pages/PetDescription/petDescription';
+import ChooseToAdopt from './pages/ChooseToAdopt/ChooseToAdopt';
 import RehomePage from "./pages/RehomePage/RehomePage";
 import LoginPopup from "./pages/LoginSignUp/loginPopUp";
 import { pets } from "./data/pets";
 import UpdateProfile from "./pages/UpdateProfile/UpdateProfile";
 import ChooseToRehome from '../src/pages/ChooseToRehome/ChooseToRehome';
+import AdoptionFAQ from "./components/FAQ/AdoptionFAQ";
+import RehomingFAQ from "./components/FAQ/RehomingFAQ";
+import WriteReview from "./components/Review/WriteReview";
+import About from "./components/About/About";
+import CareGuide from "./pages/CareGuide/CareGuide";
 
 const App = () => {
   const [loginPopup, setLoginPopup] = useState(false);
@@ -53,6 +58,11 @@ const App = () => {
             <Route path="/choose-to-adopt" element={<ChooseToAdopt />} />
             <Route path="/rehome" element={<RehomePage />} />
             <Route path="/choose-to-rehome" element={<ChooseToRehome />} />
+            <Route path="/faq/adoption" element={<AdoptionFAQ />} />
+            <Route path="/faq/rehoming" element={<RehomingFAQ />} />
+            <Route path="/write-review" element={<WriteReview />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/care-guide" element={<CareGuide />} />
           </Routes>
         </main>
         <Footer />

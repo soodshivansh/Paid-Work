@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import UserMenu from "./UserMenu";
 
 const Navbar = ({ handleLoginPopup, user, setUser }) => {
+  const location = useLocation();
+  const isUpdateProfilePage = location.pathname === '/update-profile';
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -11,7 +13,7 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isUpdateProfilePage ? 'transparent-nav' : ''}`}>
       <div className="navbar-container">
         {/* Logo */}
         <Link to="/">
@@ -31,14 +33,11 @@ const Navbar = ({ handleLoginPopup, user, setUser }) => {
           <li><Link to="/adopt" onClick={() => setIsMenuOpen(false)}>Adopt</Link></li>
           <li><Link to="/rehome" onClick={() => setIsMenuOpen(false)}>Rehome</Link></li>
           <li><Link to="/care-guide" onClick={() => setIsMenuOpen(false)}>Care Guide</Link></li>
-          <li><Link to="/about-us" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
+          <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
         </ul>
 
         {/* Right Section */}
         <div className="nav-right">
-          <button className="notification-btn">
-            <i className="bell-icon"></i>
-          </button>
           {user ? (
             <UserMenu user={user} setUser={setUser} />
           ) : (

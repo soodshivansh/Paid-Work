@@ -9,356 +9,484 @@ body {
   font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
   line-height: 1.5;
-  padding-top: 100px;
+  /* padding-top: 100px; */
   color: #333;
 }
 
 /* Page Container */
-.pet-description {
-  max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-  margin-bottom: 20px;
-}
-
-.header h1 {
-  font-size: 2.2rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.petDetails {
-  display: flex;
-  gap: 30px;
-  margin-bottom: 20px;
-}
-
-.pet-header-info {
-  flex: 1;
-}
-
-.pet-header-info h2 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: #6200ea;
-}
-
-.basic-details {
+.pet-description-container {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 20px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 40px;
+  min-height: 100vh;
 }
 
-.basic-details p {
-  font-size: 1rem;
+/* Loading State */
+.loading-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loading-paw {
+  font-size: 48px;
+  color: #6c63ff;
+}
+
+.loading-container p {
+  font-size: 1.2rem;
   color: #666;
 }
 
-/* Image Section */
-.image-section {
-  width: 50%;
-  margin-right: 30px;
+/* Error and Not Found States */
+.error-container,
+.not-found-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+.error-icon,
+.not-found-icon {
+  font-size: 64px;
+  color: #6c63ff;
+}
+
+.error-container h2,
+.not-found-container h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.error-container p,
+.not-found-container p {
+  color: #666;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.error-container button,
+.not-found-container button {
+  padding: 12px 24px;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.error-container button:hover,
+.not-found-container button:hover {
+  background-color: #5b52ff;
+  transform: translateY(-2px);
+}
+
+/* Gallery Section */
+.pet-gallery-section {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-image-container {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1);
 }
 
 .main-image {
   width: 100%;
-  max-width: 800px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+  height: 400px;
   object-fit: cover;
 }
 
-.thumbnail-section {
+.image-navigation {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
 }
 
-.thumbnail {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(108, 99, 255, 0.3);
   cursor: pointer;
-  transition: transform 0.2s;
 }
 
-.thumbnail:hover {
-  transform: scale(1.1);
+.nav-dot.active {
+  background-color: #6c63ff;
 }
 
-/* Info Section */
-.info-section {
-  width: 50%;
+.thumbnails-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
 }
 
-.story, .health-info, .physical-info, .medical-history {
-  background-color: #fff;
+.thumbnail-wrapper {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.thumbnail-wrapper.active {
+  border-color: #6c63ff;
+}
+
+.thumbnail-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.location-card {
+  background: white;
   padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-}
-
-.story h3, .health-info h3, .physical-info h3, .medical-history h3 {
-  font-size: 1.4rem;
-  color: #333;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #6200ea;
-}
-
-.story p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* Health Info and Physical Info Lists */
-.health-info ul, .physical-info ul {
-  list-style: none;
-}
-
-.health-info li, .physical-info li {
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(108, 99, 255, 0.08);
   display: flex;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  gap: 20px;
 }
 
-.health-info li:last-child, .physical-info li:last-child {
-  border-bottom: none;
+.location-icon {
+  font-size: 24px;
+  color: #6c63ff;
 }
 
-.health-info li.active {
-  color: #4caf50;
-}
-
-.icon {
-  font-size: 1.2rem;
-  margin-right: 15px;
-  width: 24px;
-  text-align: center;
-}
-
-.label {
+.location-details {
   flex: 1;
-  font-weight: 500;
 }
 
-.value {
-  color: #666;
+.location-details h3 {
+  color: #6c63ff;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
 }
 
-/* Location Section */
-.location {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.location p {
+.location-details p {
   color: #666;
   margin: 5px 0;
+  font-size: 0.95rem;
 }
 
-.location p:last-child {
-  font-weight: 500;
-  color: #333;
-}
-
-/* Adopt Prompt */
-.adopt-prompt {
-  text-align: center;
-  margin-top: 40px;
-  padding: 30px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.adopt-prompt p {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.get-started-button {
-  background-color: #6200ea;
-  color: white;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.get-started-button:hover {
-  background-color: #3700b3;
-}
-
-/* Medical History Section */
-.medical-history {
-  background-color: #fff3e0;
-}
-
-.medical-history p {
-  color: #666;
-  line-height: 1.6;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .main-section {
-    flex-direction: column;
-  }
-
-  .image-section,
-  .info-section {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-
-  .basic-details {
-    grid-template-columns: 1fr;
-  }
-
-  .thumbnail {
-    width: 80px;
-    height: 80px;
-  }
-}
-
-/* Similar Pets Section */
-.similar-pets {
-  margin: 30px 0;
-}
-
-.similar-pets h1 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #333;
-}
-
-.pet-cards {
+/* Pet Info Section */
+.pet-info-section {
   display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.card {
-  background-color: #fff;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  text-align: center;
-  width: 200px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+.pet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.card:hover {
-  transform: translateY(-5px);
+.pet-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.card-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
+.gender-icon {
+  font-size: 1.5rem;
 }
 
-.card h4 {
+.gender-icon.male {
+  color: #4a90e2;
+}
+
+.gender-icon.female {
+  color: #e24a84;
+}
+
+.type-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #6c63ff 0%, #5b52ff 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 1.1rem;
+}
+
+.type-badge svg {
   font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: #6200ea;
 }
 
-.card p {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 10px;
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-.moreInfoButton {
-  background-color: #6200ea;
-  color: #ffffff;
-  padding: 10px 15px;
-  border-width: 1PX;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  border-color: #6200ea;
-  width: 100%;
-}
-
-.card-button:hover {
-  background-color: #3700b3;
-}
-
-.adopt-prompt {
+.info-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(108, 99, 255, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40%;
-  max-width: 1200px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #fff;
-  margin: 30px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  gap: 10px;
 }
 
-.adopt-prompt p {
+.info-card svg {
+  font-size: 24px;
+  color: #6c63ff;
+}
+
+.info-card h3 {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.info-card p {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+.pet-story-section {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(108, 99, 255, 0.08);
+}
+
+.pet-story-section h2 {
+  color: #6c63ff;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.pet-story-section p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.health-training-section {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(108, 99, 255, 0.08);
+}
+
+.health-training-section h2 {
+  color: #6c63ff;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.status-card {
+  background: rgba(108, 99, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.status-card.active {
+  background: rgba(108, 99, 255, 0.15);
+}
+
+.status-card svg {
+  font-size: 24px;
+  color: #6c63ff;
+}
+
+.status-card h3 {
   font-size: 1rem;
   color: #333;
-  margin-bottom: 15px;
+  margin: 0;
 }
 
-.get-started-button {
-  padding: 10px 20px;
+.status-card p {
   font-size: 1rem;
-  color: #fff;
-  background-color: #6200ea;
+  color: #666;
+  margin: 0;
+  font-weight: 600;
+}
+
+.medical-history-section {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(108, 99, 255, 0.08);
+}
+
+.medical-history-section h2 {
+  color: #6c63ff;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.medical-card {
+  background: rgba(108, 99, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.medical-card svg {
+  font-size: 24px;
+  color: #6c63ff;
+  flex-shrink: 0;
+}
+
+.medical-card p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.adoption-cta {
+  background: linear-gradient(135deg, #6c63ff 0%, #5b52ff 100%);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+}
+
+.adoption-cta h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.adoption-cta p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.adopt-button {
+  background: white;
+  color: #6c63ff;
   border: none;
-  border-radius: 8px;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+}
+.adopt-button:hover {
+  background: #6c63ff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .pet-description-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .pet-gallery-section {
+    position: relative;
+    top: 0;
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.get-started-button:hover {
-  background-color: #3700b3;
+@media (max-width: 768px) {
+  .info-grid,
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pet-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .main-image {
+    height: 300px;
+  }
+
+  .thumbnails-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .location-card {
+    flex-direction: column;
+    text-align: center;
+  }
 }
 
-.location {
-  margin: 15px 0;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-}
+@media (max-width: 480px) {
+  .pet-description-container {
+    margin: 20px auto;
+    padding: 0 15px;
+  }
 
-.location p {
-  font-size: 1rem;
-  color: #495057;
-  margin: 5px 0;
-}
+  .pet-header h1 {
+    font-size: 2rem;
+  }
 
-.location p:last-child {
-  font-weight: 500;
-  color: #212529;
+  .thumbnails-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .type-badge {
+    font-size: 0.9rem;
+  }
 }

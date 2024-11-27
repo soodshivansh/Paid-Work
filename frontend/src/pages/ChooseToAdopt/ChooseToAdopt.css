@@ -59,14 +59,19 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1000;
+  padding: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar-image {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   height: auto;
+  padding: 0 20px;
 }
 
 .progress-fill {
@@ -300,4 +305,3 @@
     padding: 0.6rem 1rem;
   }
 }
-
