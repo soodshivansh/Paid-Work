@@ -25,6 +25,7 @@ const PetDescription = () => {
         }
         const data = await response.json();
         setPet(data);
+        console.log(pet);
       } catch (err) {
         console.error("Error fetching pet data:", err);
         setError(err.message);
