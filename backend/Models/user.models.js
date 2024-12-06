@@ -53,23 +53,23 @@ const userSchema = mongoose.Schema(
     },
     state: {
       type: String,
-      validate: {
-        validator: async function(value) {
-          if (!value || !this.zipCode) return true;
-          return await this.validateState(value);
-        },
-        message: "Invalid state for the given pincode"
-      }
+      // validate: {
+      //   validator: async function(value) {
+      //     if (!value || !this.zipCode) return true;
+      //     return await this.validateState(value);
+      //   },
+      //   message: "Invalid state for the given pincode"
+      // }
     },
     zipCode: {
       type: String,
-      validate: {
-        validator: function(v) {
-          if (!v) return true; // Allow empty zipCode
-          return /^\d{6}$/.test(v);
-        },
-        message: "Pincode must be 6 digits"
-      }
+      // validate: {
+      //   validator: function(v) {
+      //     if (!v) return true; // Allow empty zipCode
+      //     return /^\d{6}$/.test(v);
+      //   },
+      //   message: "Pincode must be 6 digits"
+      // }
     },
     googleId: {
       type: String,

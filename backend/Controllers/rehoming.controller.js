@@ -7,6 +7,7 @@ export const initializeRehoming = async (req, res, next) => {
   try {
     const { termsAgreed } = req.body;
     const user = req.user; // This comes from the protect middleware
+    console.log(user);
 
     if (!user) {
       return next(createError(401, "User not found"));
@@ -19,7 +20,7 @@ export const initializeRehoming = async (req, res, next) => {
       // Split the name into first and last name
       const nameParts = user.name.split(' ');
       const firstName = nameParts[0];
-      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ' ';
 
       // Create new rehomer using logged-in user's information
       rehomer = new Rehomer({
@@ -33,6 +34,7 @@ export const initializeRehoming = async (req, res, next) => {
         termsAgreedDate: new Date(),
         status: 'active'
       });
+      console.log(rehomer);
 
       try {
         await rehomer.save();
