@@ -210,6 +210,7 @@ export const getDocuments = async (req, res, next) => {
 // Update pet information (for each step)
 export const updatePetInfoStep = async (req, res, next) => {
   try {
+    console.log(req.body)
     const { rehomerId, step, petData } = req.body;
     
     // Validate rehomer exists
@@ -217,6 +218,7 @@ export const updatePetInfoStep = async (req, res, next) => {
     if (!rehomer) {
       return next(createError(404, "Rehomer not found"));
     }
+    console.log("rehomer are here" +rehomer)
 
     // If pet doesn't exist yet (first pet info update), create it
     let pet;
@@ -231,6 +233,8 @@ export const updatePetInfoStep = async (req, res, next) => {
         return next(createError(404, "Pet not found"));
       }
     }
+
+    console.log(JSON.stringify(pet))
 
     // Update pet information based on the current step
     switch (step) {

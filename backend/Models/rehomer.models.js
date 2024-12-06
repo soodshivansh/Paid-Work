@@ -4,15 +4,12 @@ const rehomerSchema = new Schema({
   // Basic Information
   firstName: {
     type: String,
-    required: true
   },
   lastName: {
     type: String,
-    required: true
   },
   email: {
     type: String,
-    required: true,
     unique: true,
     validate: {
       validator: function(v) {
@@ -23,15 +20,12 @@ const rehomerSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true
   },
     state: {
       type: String,
-      required: true
     },
     pincode: {
       type: String,
-      required: true,
       validate: {
         validator: function(v) {
           return /^[1-9][0-9]{5}$/.test(v);
@@ -49,11 +43,9 @@ const rehomerSchema = new Schema({
     type: {
       type: String,
       enum: ['vaccination', 'medical_history', 'other'],
-      required: true
     },
     url: {
       type: String,
-      required: true,
       validate: {
         validator: function(v) {
           return /^https?:\/\/.*\.(pdf|jpg|jpeg|png)$/.test(v);
@@ -70,13 +62,12 @@ const rehomerSchema = new Schema({
   // Account status
   status: {
     type: String,
-    enum: ['active', 'suspended', 'inactive'],
+    enum: ['active', 'suspended', 'inactive' , "Draft"],
     default: 'active'
   },
   // Terms agreement
   termsAgreed: {
     type: Boolean,
-    required: true
   },
   termsAgreedDate: {
     type: Date,
