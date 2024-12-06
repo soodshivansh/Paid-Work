@@ -83,7 +83,7 @@ const ChooseToRehome = () => {
       } else if (currentStep > 1 && currentStep < 8) {
         await updatePetInfo({
           ...petData,
-          step: currentStep
+          step: currentStep,
         });
       }
   
