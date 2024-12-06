@@ -9,6 +9,7 @@ const ChooseToRehome = () => {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [error, setError] = useState("");
   const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+  const petId = localStorage.getItem("petId");
   const [petData, setPetData] = useState({
     type: "",
     name: "",
@@ -84,6 +85,7 @@ const ChooseToRehome = () => {
         await updatePetInfo({
           ...petData,
           step: currentStep,
+          petId
         });
       }
   
@@ -140,19 +142,22 @@ const ChooseToRehome = () => {
         );
       case 2:
         return (
-          <div className="step-content">
+          <div className="step-content"> 
             <h2>Primary Questions</h2>
             <form className="primary-questions">
               <label>
                 <strong>Are you rehoming a dog or cat?</strong>
                 <div>
+                  <div className="" style={{"display":"flex","justifyContent":"center","alignContent":"center"}}>
+                    <label>Dog</label>
                   <input 
                     type="radio" 
                     name="type" 
                     value="dog"
                     checked={petData.type === "dog"}
                     onChange={(e) => handleInputChange("type", e.target.value)} 
-                  /> Dog
+                  />
+                  </div>
                   <input 
                     type="radio" 
                     name="type" 

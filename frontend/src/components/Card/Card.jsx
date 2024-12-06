@@ -68,7 +68,7 @@ const Card = ({ pet }) => {
         <Link to={`/petDescription/${pet._id}`} className="more-info-link">
           <button className="bg-accent hover:bg-accent-light text-white transition-colors duration-300">
             More Info
-          </button>
+          </button> 
         </Link>
       </div>
     </div>
