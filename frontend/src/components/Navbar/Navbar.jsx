@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import UserMenu from "./UserMenu";
+import { getProfile } from "../../services/profileService";
 
 const Navbar = ({ handleLoginPopup, user, setUser }) => {
   const location = useLocation();
