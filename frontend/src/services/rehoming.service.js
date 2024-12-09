@@ -64,13 +64,14 @@ export const uploadPetImages = async (formData) => {
   console.log('Auth headers:', getAuthHeader());
   
   try {
+    console.log('Uploading pet images:' );
     const response = await axios.post(
-      `${API_URL}/upload/images`,
+      `${API_URL}/rehoming/upload/images`,
       formData,
       {
         headers: {
           ...getAuthHeader(),
-          'Content-Type': 'multipart/form-data'
+         
         }
       }
     );

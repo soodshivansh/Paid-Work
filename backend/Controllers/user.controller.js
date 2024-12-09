@@ -18,19 +18,19 @@ const getProfilePictureUrl = (req, filename) => {
   }
 
   // Ensure the path starts with /uploads/user/
-  const relativePath = filename.startsWith('/uploads/user/') 
+  const relativePath = filename.startsWith('') 
     ? filename 
-    : path.join('/uploads/user/', path.basename(filename));
+    : path.join('/public/User', path.basename(filename));
 
   const baseUrl = `${req.protocol}://${req.get('host')}`;
-  return `${baseUrl}${relativePath}`;
+  return `${relativePath}`;
 };
 
 // Helper function to get relative path for storing in database
 const getRelativePath = (filename) => {
   if (!filename) return undefined;
   if (filename.startsWith('http')) return filename;
-  return path.join('/uploads/user/', path.basename(filename)).replace(/\\/g, '/');
+  return path.join('/User', path.basename(filename)).replace(/\\/g, '/');
 };
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -170,12 +170,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     userResponse.profilePicture = getProfilePictureUrl(req, userResponse.profilePicture);
 
     res.json(userResponse);
+    console.log('Updated user profile:', userResponse);
   } catch (error) {
     console.error('Error updating user profile:', error);
     res.status(400);
     throw error;
   }
 });
+
 
 const changePassword = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);

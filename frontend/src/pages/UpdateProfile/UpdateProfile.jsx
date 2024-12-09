@@ -232,6 +232,7 @@ const UpdateProfile = () => {
       setIsLoading(false);
     }
   };
+  console.log("sau",profilePic);
   
   const renderField = (field, label, disabled = false) => (
     <div className="relative">
@@ -383,7 +384,7 @@ const UpdateProfile = () => {
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-purple-100">
                     <img
-                      src={profilePic || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+                      src={`http://localhost:8080${profilePic}` || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
                       alt="Profile"
                       className="w-full h-full object-cover"
                       onError={(e) => {

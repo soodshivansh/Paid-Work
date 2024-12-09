@@ -15,6 +15,7 @@ export const createPaymentLink=async (req,res)=>{
           },
           reminder_enable: true,
           callback_url: `http://localhost:3000/`,
+          callback_method: "get",
          
         };
         

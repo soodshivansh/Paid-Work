@@ -10,20 +10,10 @@ const __dirname = path.dirname(__filename);
 // Configure multer for local storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // const uploadPath = path.join(__dirname, '../public/user');
-    
-    // // Create directory if it doesn't exist
-    // if (!fs.existsSync(uploadPath)) {
-    //   fs.mkdirSync(uploadPath, { recursive: true });
-    // }
-    
-    cb(null, 'public/User' );
+
+    cb(null, 'public/Pet' );
   },
-  // filename: function (req, file, cb) {
-  //   // Create unique filename with timestamp and original extension
-  //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-  //   cb(null, uniqueSuffix + path.extname(file.originalname));
-  // }
+
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   }
@@ -54,7 +44,7 @@ const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
   }
-});
+}).array('images', 4);
 
 
 export default upload;

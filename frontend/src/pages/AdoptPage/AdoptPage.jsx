@@ -174,6 +174,7 @@ const AdoptPage = () => {
     }
   };
 
+  // console.log("saurabh Hwro",pets[0]?.images[0].path);/
   return (
     <div className="adopt-page">
       <motion.div 

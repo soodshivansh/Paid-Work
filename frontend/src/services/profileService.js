@@ -17,6 +17,7 @@ const getProfile = async () => {
     };
 
     const response = await axios.get(`${API_URL}/profile`, config);
+    console.log("Saurabh",response.data);
     return {
       success: true,
       user: response.data
@@ -29,7 +30,7 @@ const getProfile = async () => {
 
 // Function to update user profile with image support
 const updateProfile = async (userData, profilePicture = null) => {
-  try {
+  try {       
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Authentication token not found');

@@ -32,16 +32,10 @@ const petSchema = new Schema({
     type: String, 
   },
   images: [{
-    type: Array,
-    validate: {
-      validator: function(v) {
-        // Basic URL validation
-        return /^https?:\/\/.*\.cloudinary\.com\/.*$/.test(v);
-      },
-      message: props => `${props.value} is not a valid Cloudinary URL!`
-    }
+    path: { type: String },
+    filename: { type: String }
   }],
-  location: {
+  location: { 
     city: { 
       type: String, 
     },

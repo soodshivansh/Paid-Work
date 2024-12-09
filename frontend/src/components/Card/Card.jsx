@@ -4,6 +4,7 @@ import { FaDog, FaCat } from 'react-icons/fa';
 import './Card.css';
 
 const Card = ({ pet }) => {
+  console.log("Sauanh pet ",pet.images[0].path);
   const locationString = pet.location ? `${pet.location.city}, ${pet.location.state}, ${pet.location.country}` : "Location not available";
   const isPetDog = pet.type?.toLowerCase() === 'dog';
   const PetIcon = isPetDog ? FaDog : FaCat;
@@ -22,10 +23,10 @@ const Card = ({ pet }) => {
       <div className="card-header">
         <div className="card-image-container">
           <img 
-            src={pet.photos?.[0] || getDefaultImage()} 
+            src={`http://localhost:8080/Pet/${pet?.images[0]?.path}`}
             alt={`${pet.type} - ${pet.name}`} 
             className="card-image" 
-            onError={handleImageError}
+            // onError={handleImageError}
           />
         </div>
         <div className="header-content">
