@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ChooseToAdopt.css";
 import FormStep1 from "../../components/FormSteps/FormStep1";
 import FormStep3 from "../../components/FormSteps/FormStep3";
@@ -8,23 +8,48 @@ import FormStep5 from "../../components/FormSteps/FormStep5";
 import FormStep6 from "../../components/FormSteps/FormStep6";
 import FormStep7 from "../../components/FormSteps/FormStep7";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+export const paymentLink=async()=>{
+  try{
+    const response=await axios.post(`http://localhost:8080/api/payment`);
+    // console.log("saurabh data ",response.data.data.paymentLinkUrl);
+    return response.data.data.paymentLinkUrl;
+    
+  }catch(err){
+    console.log(err); 
+    
+  }
+}
 
 const ChooseToAdopt = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = 8;
   const progressBarImage = `/assets/steps/step${currentStep + 1}.png`;
   const Navigate = useNavigate();
-
+  const [paymentLinkUrl, setPaymentLinkUrl] = useState("");
   const handleNext = () => {
+  
     if (currentStep < totalSteps - 1) setCurrentStep(currentStep + 1);
   };
+  useEffect(() => {
+    const fetchPaymentLink = async () => {
+      const response = await paymentLink();
+      setPaymentLinkUrl(response);
+      console.log("saurabh data ", response);
+    };
+    fetchPaymentLink();
+  }, []);
+
+ 
 
   const handleBack = () => {
+ 
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
 
   const handleProfile = () => {
-    Navigate('/profile');
+    window.location.href=paymentLinkUrl;
+    // Navigate('/profile');
   };
 
   // Render form content based on the step
@@ -48,6 +73,7 @@ const ChooseToAdopt = () => {
         return <div className="">
           <h1>Thanks For Submiting!</h1>
           <h4>The pets's owner will be sent a link to your profile when your application has been approved by Paws4Home</h4>
+          
         </div>;
     }
   };
@@ -74,7 +100,7 @@ const ChooseToAdopt = () => {
         {
           currentStep === totalSteps - 1 ? 
           <button onClick={handleProfile}>
-            Go To My Profile
+           Payment 
           </button>
           :
           <button onClick={handleNext}>

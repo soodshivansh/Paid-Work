@@ -18,6 +18,7 @@ import RehomingFAQ from "./components/FAQ/RehomingFAQ";
 import WriteReview from "./components/Review/WriteReview";
 import About from "./components/About/About";
 import CareGuide from "./pages/CareGuide/CareGuide";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
 
 const App = () => {
   const [loginPopup, setLoginPopup] = useState(false);
@@ -55,6 +56,7 @@ const App = () => {
             <Route path="/adopt" element={<AdoptPage pets={pets} />} />
             <Route path="/petDescription/:id" element={<PetDescription />} />
             <Route path="/profile" element={<UpdateProfile />} />
+            <Route path="/admin-panel" element={<AdminPanel />} />
             <Route path="/choose-to-adopt" element={<ChooseToAdopt />} />
             <Route path="/rehome" element={<RehomePage />} />
             <Route path="/choose-to-rehome" element={<ChooseToRehome />} />

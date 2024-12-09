@@ -12,6 +12,8 @@ import cors from "cors";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import paymentRoute from './Routes/paymentrouter.js';
+import { updatePetStatus } from './Controllers/updatePetStatus.controller.js';
 
 // Load environment variables
 dotenv.config();
@@ -57,6 +59,10 @@ app.use('/api/pets', petRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/users", profileRoutes);
 app.use("/api/rehoming", rehomingRoutes);
+
+
+app.use('/api/payment',paymentRoute);
+app.use('/api/change-pet-status',updatePetStatus);
 
 // Error handling middleware
 app.use(handleUploadError); // Handle file upload errors

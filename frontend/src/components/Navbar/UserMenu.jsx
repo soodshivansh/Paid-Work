@@ -2,11 +2,26 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../services/authService';
 import { FaUser, FaSignOutAlt, FaChevronDown } from 'react-icons/fa';
+import { getProfile } from '../../services/profileService';
 
 const UserMenu = ({ user, setUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  const [mail, setmail] = useState("");
+
+  const loadUserData = async () => {
+    try{
+      const response = await getProfile();
+      if (response.success && response.user) {
+        const user = response.user;
+        setmail(user.email || "");
+      }
+    }catch(err){
+      console.log("Something went wrong");
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -14,6 +29,8 @@ const UserMenu = ({ user, setUser }) => {
         setIsOpen(false);
       }
     };
+
+    loadUserData();
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -29,6 +46,10 @@ const UserMenu = ({ user, setUser }) => {
 
   const handleProfile = () => {
     navigate('/profile');
+    setIsOpen(false);
+  };
+  const handleAdmin = () => {
+    navigate('/admin-panel');
     setIsOpen(false);
   };
 
@@ -49,7 +70,16 @@ const UserMenu = ({ user, setUser }) => {
             <FaUser />
             <span>Profile</span>
           </div>
-          <div className="menu-divider"></div>
+            <div className="menu-divider"></div>
+
+            {
+              mail == "admin@gmail.com" ? <>
+              <div className="menu-item" onClick={handleAdmin}>
+            <FaUser />
+            <span>Admin Panel</span>
+          </div>
+          <div className="menu-divider"></div></>: ""
+          }
           <div className="menu-item" onClick={handleLogout}>
             <FaSignOutAlt />
             <span>Logout</span>
