@@ -58,8 +58,16 @@
 
 .navigation-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Center the buttons horizontally */
+  gap: 10px; /* Optional: Adds space between the buttons */
   margin-top: 20px;
+}
+
+.back-button,
+.next-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 button {

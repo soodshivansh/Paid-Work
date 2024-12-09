@@ -51,7 +51,7 @@ const AdminPanel = () => {
 
   const fetchPetsData = async (setPets) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/pets");
+      const response = await axios.get("http://localhost:8080/api/pets/adminPets");
       // Filter pets by approvedStatus and sort by creation date
       const approvedPets = response.data
         .filter(pet => !pet.approvedStatus)

@@ -628,7 +628,7 @@ const ChooseToRehome = () => {
   };
 
   return (
-    <div className="choose-to-rehome">
+    <div className="choose-to-rehome flex flex-col items-center">
       {/* Progress Bar */}
       <div className="progress-bar">
         <img
@@ -649,7 +649,7 @@ const ChooseToRehome = () => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="navigation-buttons">
+      <div className="navigation-buttons ">
         <button
           onClick={handleBack}
           disabled={currentStep === 1}
