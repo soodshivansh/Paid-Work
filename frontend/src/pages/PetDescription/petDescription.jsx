@@ -24,8 +24,8 @@ const PetDescription = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Saubrabh",data.images)
         setPet(data);
-        console.log(pet);
       } catch (err) {
         console.error("Error fetching pet data:", err);
         setError(err.message);
@@ -97,13 +97,14 @@ const PetDescription = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
         >
+         
           <img 
-            src={pet.photos[activeImage]} 
-            alt={pet.name} 
+            src={`http://localhost:8080/Pet/${pet.images[0].path}`}
+            alt={pet.images[0].path} 
             className="main-image" 
           />
           <div className="image-navigation">
-            {pet.photos.map((_, index) => (
+            {pet.images.map((_, index) => (
               <motion.div
                 key={index}
                 className={`nav-dot ${index === activeImage ? 'active' : ''}`}
@@ -115,14 +116,14 @@ const PetDescription = () => {
         </motion.div>
         
         <div className="thumbnails-container">
-          {pet.photos.map((photo, index) => (
+          {pet.images.map((image, index) => (
             <motion.div
               key={index}
               className={`thumbnail-wrapper ${index === activeImage ? 'active' : ''}`}
               whileHover={{ scale: 1.05 }}
               onClick={() => setActiveImage(index)}
             >
-              <img src={photo} alt={`${pet.name} - ${index + 1}`} />
+              <img src={`http://localhost:8080/Pet/${image.path}`}/>
             </motion.div>
           ))}
         </div>

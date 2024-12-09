@@ -38,7 +38,8 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(express.json());
 
 // Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use(express.static('public'))
 
 const corsOptions = {
   origin: "*", 

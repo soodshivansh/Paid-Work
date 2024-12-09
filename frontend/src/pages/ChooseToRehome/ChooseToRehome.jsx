@@ -4,6 +4,7 @@ import {
   initializeRehoming,
   updatePetInfo,
   finalizeRehoming,
+  uploadPetImages,
 } from "../../services/rehoming.service";
 import "./ChooseToRehome.css";
 import axios from "axios";
@@ -75,7 +76,7 @@ const ChooseToRehome = () => {
     const fetchPaymentLink = async () => {
       const response = await paymentLink();
       setPaymentLinkUrl(response);
-      console.log("saurabh data ", response);
+      
     };
     fetchPaymentLink();
   }, []);
@@ -103,8 +104,8 @@ const ChooseToRehome = () => {
     const files = Array.from(event.target.files);
     setPetData((prev) => ({
       ...prev,
-      [type]: [...prev[type], ...files],
-    }));
+      [type]: [...prev[type]||[], ...files],
+    }));  
   };
 
 
@@ -117,17 +118,41 @@ const ChooseToRehome = () => {
     try {
       if (currentStep === 1) {
         //  const paymentLink= await paymentLink();
-        //  console.log("saurabh data ",paymentLink);
-     
+        //  console.log("saurabh data ",paymentLinkUrl);
         await initializeRehoming(termsAgreed);
+        // window.location.href = paymentLinkUrl;
 
         setError("");
       } else if (currentStep > 1 && currentStep < 8) {
-        await updatePetInfo({
-          ...petData,
-          step: currentStep,
-          petId,
-        });
+        console.log("petData", petData.images);
+        if (currentStep === 3 && petData.images && petData.images.length > 0) {
+          // Create a FormData object to hold the images
+          const formData = new FormData();
+          petData.images.forEach((file, index) => {
+            formData.append('images', file);
+          });
+          formData.append('petId', petId);
+  
+          // Upload the images and get the response
+          const uploadResponse = await uploadPetImages(formData);
+          console.log('Uploaded images:', uploadResponse);
+  
+          // Update petData with the uploaded image paths
+          const updatedPetData = {
+            ...petData,
+            images: uploadResponse.images, // Assuming the response contains the image paths
+            step: currentStep,
+            petId,
+          };
+  
+          await updatePetInfo(updatedPetData);
+        } else {
+          await updatePetInfo({
+            ...petData,
+            step: currentStep,
+            petId,
+          });
+        }
       }
 
       if (currentStep === 8) {
@@ -135,14 +160,10 @@ const ChooseToRehome = () => {
         // Clear rehoming data from localStorage
         localStorage.removeItem("rehomerId");
         localStorage.removeItem("petId");
-        // Navigate to adopt page with refresh state
-        // const response = await axios.post(`${API_URL.BASE}/payment`);
-        // console.log(response);
-        // console.log(response.paymentLinkUrl);
-        // console.log(response.data);
+        
         window.location.href = paymentLinkUrl;
 
-        // navigate("/adopt", { state: { fromRehoming: true } });
+       
         return;
       }
 

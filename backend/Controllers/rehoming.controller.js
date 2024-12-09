@@ -2,6 +2,13 @@ import Pet from "../Models/pet.models.js";
 import Rehomer from "../Models/rehomer.models.js";
 import { createError } from "../utils/error.js";
 
+// get path
+const getRelativePath = (filename) => {
+  if (!filename) return undefined;
+  if (filename.startsWith('http')) return filename;
+  return path.join('/uploads/multiplePhotos/', path.basename(filename)).replace(/\\/g, '/');
+};
+
 // Initialize rehoming process
 export const initializeRehoming = async (req, res, next) => {
   try {
@@ -138,7 +145,7 @@ export const getRehomerProfile = async (req, res, next) => {
 
 // Update pet information
 export const updatePetInfo = async (req, res, next) => {
-  try {
+  try { 
     const { petId } = req.params;
     const petData = req.body;
     const rehomer = await Rehomer.findOne({ email: req.user.email });
@@ -222,7 +229,6 @@ export const updatePetInfoStep = async (req, res, next) => {
   try {
     console.log(req.body);
     const { rehomerId, step, petData } = req.body;
-
     // Validate rehomer exists
     const rehomer = await Rehomer.findById(rehomerId);
     if (!rehomer) {
@@ -256,7 +262,21 @@ export const updatePetInfoStep = async (req, res, next) => {
         break;
 
       case 3: // Pet's Images
-        pet.images = petData.images;
+        // pet.images = petData.images;
+        // break;
+        // console.log("Sauabh fiole upload",req.files);
+        console.log("Sauabh fiole upload",pet.images);
+        console.log("Pet Data  fiole upload",petData.images);
+        
+
+        if (req.files && req.files.length > 0) {
+          pet.images = req.files.map(file => ({
+            path: getRelativePath(file.filename),
+            filename: file.originalname
+          }));
+        } else {
+          pet.images = petData.images;
+        }
         break;
 
       case 4: // Characteristics
@@ -409,3 +429,29 @@ export const getPetDetails = async (req, res, next) => {
     next(err);
   }
 };
+
+export const uploadPetImages= async (req, res, next) => {
+  try {
+    const images = req.files.map(file => ({
+      path: `${file.filename}`,
+      filename:file.originalname
+    }));
+
+    // Assuming you have the petId in the request body
+    const { petId } = req.body;
+
+    // Find the pet and update its images field
+    const pet = await Pet.findById(petId);
+    if (!pet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    pet.images.push(...images);
+    await pet.save();
+
+    res.status(200).json({ images });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
+}
