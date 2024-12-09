@@ -39,6 +39,7 @@ const FormStep2 = () => {
             type="text"
             name="apartment"
             placeholder="Apartment, suite, unit (if applicable)"
+            required
           />
         </div>
 

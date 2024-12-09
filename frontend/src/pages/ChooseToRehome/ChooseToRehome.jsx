@@ -216,6 +216,7 @@ const ChooseToRehome = () => {
                 type="checkbox"
                 checked={termsAgreed}
                 onChange={(e) => setTermsAgreed(e.target.checked)}
+                required
               />
               I agree to the <a href="#terms">Terms</a> and{" "}
               <a href="#privacy-policy">Privacy Policy</a>.
@@ -238,6 +239,7 @@ const ChooseToRehome = () => {
                       value="dog"
                       checked={petData.type === "dog"}
                       onChange={(e) => handleInputChange("type", e.target.value)}
+                      required
                     />
                   </div>
                   
@@ -249,6 +251,7 @@ const ChooseToRehome = () => {
                       value="cat"
                       checked={petData.type === "cat"}
                       onChange={(e) => handleInputChange("type", e.target.value)}
+                      required
                     />
                   </div>
                 </div>
@@ -266,6 +269,7 @@ const ChooseToRehome = () => {
                       onChange={(e) =>
                         handleInputChange("spayed", e.target.value)
                       }
+                      required
                     />{" "}
                   </div>
                   <div className="flex">
@@ -278,6 +282,7 @@ const ChooseToRehome = () => {
                       onChange={(e) =>
                         handleInputChange("spayed", e.target.value)
                       }
+                      required
                     />{" "}
                   </div>
                 </div>
@@ -330,6 +335,7 @@ const ChooseToRehome = () => {
                   <input
                     type="file"
                     onChange={(e) => handleFileChange(e, "images")}
+                    required
                   />
                 </div>
               ))}
@@ -348,6 +354,7 @@ const ChooseToRehome = () => {
                   value={petData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Enter pet's name"
+                  required
                 />
               </label>
               <label>
@@ -358,6 +365,7 @@ const ChooseToRehome = () => {
                   onChange={(e) => handleInputChange("age", e.target.value)}
                   min="0"
                   placeholder="0"
+                  required
                 />
               </label>
               <label>
@@ -390,6 +398,7 @@ const ChooseToRehome = () => {
                   value={petData.breed}
                   onChange={(e) => handleInputChange("breed", e.target.value)}
                   placeholder="Enter breed(s)"
+                  required
                 />
               </label>
               <label>
@@ -399,6 +408,7 @@ const ChooseToRehome = () => {
                   value={petData.color}
                   onChange={(e) => handleInputChange("color", e.target.value)}
                   placeholder="Enter colors"
+                  required
                 />
               </label>
             </form>
@@ -424,6 +434,7 @@ const ChooseToRehome = () => {
                         onChange={(e) =>
                           handleInputChange(fact, e.target.value, "keyFacts")
                         }
+                        required
                       />{" "}
                       Yes
                     </label>
@@ -436,6 +447,7 @@ const ChooseToRehome = () => {
                         onChange={(e) =>
                           handleInputChange(fact, e.target.value, "keyFacts")
                         }
+                        required
                       />{" "}
                       No
                     </label>
@@ -448,6 +460,7 @@ const ChooseToRehome = () => {
                         onChange={(e) =>
                           handleInputChange(fact, e.target.value, "keyFacts")
                         }
+                        required
                       />{" "}
                       Unknown
                     </label>
@@ -471,6 +484,7 @@ const ChooseToRehome = () => {
                     handleInputChange("postcode", e.target.value, "location")
                   }
                   placeholder="Enter postcode"
+                  required
                 />
               </label>
               <label>
@@ -486,6 +500,7 @@ const ChooseToRehome = () => {
                     )
                   }
                   placeholder="Enter address line 1"
+                  required
                 />
               </label>
               <label>
@@ -501,6 +516,7 @@ const ChooseToRehome = () => {
                     )
                   }
                   placeholder="Enter address line 2"
+                  required
                 />
               </label>
               <label>
@@ -512,6 +528,7 @@ const ChooseToRehome = () => {
                     handleInputChange("city", e.target.value, "location")
                   }
                   placeholder="Enter city"
+                  required
                 />
               </label>
             </form>
@@ -537,6 +554,7 @@ const ChooseToRehome = () => {
                   handleInputChange("personality", e.target.value)
                 }
                 placeholder="Describe your pet's temperament, favorite activities, and unique traits..."
+                required
               ></textarea>
 
               <label htmlFor="dailyRoutine">What's their daily routine?</label>
@@ -547,6 +565,7 @@ const ChooseToRehome = () => {
                   handleInputChange("dailyRoutine", e.target.value)
                 }
                 placeholder="Share about their eating habits, exercise needs, sleeping schedule..."
+                required
               ></textarea>
 
               <label htmlFor="idealHome">
@@ -557,6 +576,7 @@ const ChooseToRehome = () => {
                 value={petData.idealHome}
                 onChange={(e) => handleInputChange("idealHome", e.target.value)}
                 placeholder="Describe the perfect environment and family for your pet..."
+                required
               ></textarea>
             </div>
           </div>
@@ -579,6 +599,7 @@ const ChooseToRehome = () => {
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange(e, "documents")}
+                      required
                     />
                     <p>Click to upload or drag and drop</p>
                   </div>
