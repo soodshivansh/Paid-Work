@@ -229,59 +229,57 @@ const ChooseToRehome = () => {
             <form className="primary-questions">
               <label>
                 <strong>Are you rehoming a dog or cat?</strong>
-                <div>
-                  <div
-                    className=""
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <label>Dog</label>
+                <div className="pt-5">
+                  <div className="flex">
+                    <div>Dog</div>
                     <input
                       type="radio"
                       name="type"
                       value="dog"
                       checked={petData.type === "dog"}
-                      onChange={(e) =>
-                        handleInputChange("type", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("type", e.target.value)}
                     />
                   </div>
-                  <input
-                    type="radio"
-                    name="type"
-                    value="cat"
-                    checked={petData.type === "cat"}
-                    onChange={(e) => handleInputChange("type", e.target.value)}
-                  />{" "}
-                  Cat
+                  
+                  <div className="flex">
+                    <div>Cat</div>
+                    <input
+                      type="radio"
+                      name="type"
+                      value="cat"
+                      checked={petData.type === "cat"}
+                      onChange={(e) => handleInputChange("type", e.target.value)}
+                    />
+                  </div>
                 </div>
               </label>
               <label>
                 <strong>Is your pet spayed or neutered?</strong>
-                <div>
-                  <input
-                    type="radio"
-                    name="spayed"
-                    value="yes"
-                    checked={petData.spayed === "yes"}
-                    onChange={(e) =>
-                      handleInputChange("spayed", e.target.value)
-                    }
-                  />{" "}
-                  Yes
-                  <input
-                    type="radio"
-                    name="spayed"
-                    value="no"
-                    checked={petData.spayed === "no"}
-                    onChange={(e) =>
-                      handleInputChange("spayed", e.target.value)
-                    }
-                  />{" "}
-                  No
+                <div className="pt-5">
+                  <div className="flex">
+                    <div className="">Yes</div>
+                    <input
+                      type="radio"
+                      name="spayed"
+                      value="yes"
+                      checked={petData.spayed === "yes"}
+                      onChange={(e) =>
+                        handleInputChange("spayed", e.target.value)
+                      }
+                    />{" "}
+                  </div>
+                  <div className="flex">
+                    <div className="">No</div>
+                    <input
+                      type="radio"
+                      name="spayed"
+                      value="no"
+                      checked={petData.spayed === "no"}
+                      onChange={(e) =>
+                        handleInputChange("spayed", e.target.value)
+                      }
+                    />{" "}
+                  </div>
                 </div>
               </label>
               <label>
