@@ -11,17 +11,18 @@ const fetchPetsData = async (setLoading, setPets) => {
   try {
     setLoading(true);
     const response = await axios.get("http://localhost:8080/api/pets");
-    // Sort pets by creation date to show newest first
-    const sortedPets = response.data.sort((a, b) => 
-      new Date(b.createdAt) - new Date(a.createdAt)
-    );
-    setPets(sortedPets);
+    // Filter pets by approvedStatus and sort by creation date
+    const approvedPets = response.data
+      .filter(pet => pet.approvedStatus) // Keep only pets with approvedStatus true
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by creation date
+    setPets(approvedPets);
   } catch (error) {
     console.error("Error fetching pets:", error);
   } finally {
     setLoading(false);
   }
 };
+
 
 const AdoptPage = () => {
   const [pets, setPets] = useState([]);
@@ -88,7 +89,11 @@ const AdoptPage = () => {
       try {
         setError(null);
         const response = await axios.get("http://localhost:8080/api/pets");
-        setPets(response.data);
+    // Filter pets by approvedStatus and sort by creation date
+    const approvedPets = response.data
+      .filter(pet => pet.approvedStatus) // Keep only pets with approvedStatus true
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by creation date
+    setPets(approvedPets);
       } catch (error) {
         setError("Failed to fetch pets. Please try again later.");
         console.error("Error fetching pets:", error);

@@ -422,7 +422,7 @@ const UpdateProfile = () => {
               {!showPasswordSection ? (
                 <button
                   onClick={() => setShowPasswordSection(true)}
-                  className="w-full py-2 px-4 border border-purple-500 text-purple-500 rounded-lg hover:bg-purple-50 transition-colors duration-200"
+                  className="w-full py-2 px-4 border border-purple-500 text-white rounded-lg hover:bg-purple-50 transition-colors duration-200"
                 >
                   Change Password
                 </button>

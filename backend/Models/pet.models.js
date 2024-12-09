@@ -4,6 +4,10 @@ const petSchema = new Schema({
   name: { 
     type: String, 
   },
+  approvedStatus: {
+    type: Boolean,
+    default: false,
+  },
   type: {
     type: String,
     enum: ['dog', 'cat'],

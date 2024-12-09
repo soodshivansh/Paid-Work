@@ -145,7 +145,7 @@ export const getRehomerProfile = async (req, res, next) => {
 
 // Update pet information
 export const updatePetInfo = async (req, res, next) => {
-  try {
+  try { 
     const { petId } = req.params;
     const petData = req.body;
     const rehomer = await Rehomer.findOne({ email: req.user.email });
@@ -229,7 +229,6 @@ export const updatePetInfoStep = async (req, res, next) => {
   try {
     console.log(req.body);
     const { rehomerId, step, petData } = req.body;
-
     // Validate rehomer exists
     const rehomer = await Rehomer.findById(rehomerId);
     if (!rehomer) {
