@@ -4,7 +4,7 @@ import { FaDog, FaCat } from 'react-icons/fa';
 import './Card.css';
 
 const Card = ({ pet }) => {
-  console.log("Sauanh pet ",pet.images[0].path);
+  //console.log("Sauanh pet ",pet.images[0].path);
   const locationString = pet.location ? `${pet.location.city}, ${pet.location.state}, ${pet.location.country}` : "Location not available";
   const isPetDog = pet.type?.toLowerCase() === 'dog';
   const PetIcon = isPetDog ? FaDog : FaCat;
