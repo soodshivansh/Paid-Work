@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import paymentRoute from './Routes/paymentrouter.js';
 import { updatePetStatus } from './Controllers/updatePetStatus.controller.js';
+import AdminRoutes from "./Routes/AdminRoute.js"
 
 // Load environment variables
 dotenv.config();
@@ -64,6 +65,7 @@ app.use("/api/rehoming", rehomingRoutes);
 
 app.use('/api/payment',paymentRoute);
 app.use('/api/change-pet-status',updatePetStatus);
+app.use('/api/Admin' ,  AdminRoutes);
 
 // Error handling middleware
 app.use(handleUploadError); // Handle file upload errors
