@@ -2,10 +2,13 @@ import User from "../Models/user.models.js";
 import Pet from "../Models/pet.models.js";
 
 
-export const users = async (req,res) => {
+export const users = async (req,res,next) => {
     try {
+        console.log("Hi");
         const users = await User.find();
         const fetchUser = users.filter(({email}) => email != "admin@gmail.com" )
+        console.log(fetchUser);
+        
         return res.json(fetchUser);
     } catch (error) {
         console.error('Error fetching users data:', err);

@@ -5,11 +5,11 @@ import { protect } from "../Middlewares/authMiddleware.js";
 const router = express.Router();
 
 
-router.get('/allUsers', protect, users);
+router.get('/allUsers', users);
 
-router.get('/allPets', protect,pets);
+router.get('/allPets', pets);
 
 router.delete('/deletePets/:id',protect,deletePets);
-router.delete('/deleteUser/:id',protect,deleteUser);
+router.delete('/deleteUser/:id', deleteUser);
 
 export default router;
